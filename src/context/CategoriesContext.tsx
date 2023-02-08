@@ -1,9 +1,9 @@
 import { createContext, useState } from "react";
-import { useLocalStorageState } from "./hooks/useLocalStorageState";
+import { useLocalStorageState } from "../hooks/useLocalStorageState";
 
-export const Context = createContext(null);
+export const CategoriesContext = createContext(null);
 
-export function ContextProvider({ children }) {
+export function CategoriesContextProvider({ children }) {
   const [categoriesIncome, setCategoriesIncome] = useLocalStorageState(
     "budget_app_categories_expense",
     [
@@ -27,9 +27,21 @@ export function ContextProvider({ children }) {
     ]
   );
 
+  const [editCategoryModalOpen, setEditCategoryModalOpen] = useState(false);
+  const [categoryNameToEdit, setCategoryNameToEdit] = useState("");
+
   return (
-    <Context.Provider value={{ categoriesIncome, categoriesExpense }}>
+    <CategoriesContext.Provider
+      value={{
+        categoriesIncome,
+        categoriesExpense,
+        editCategoryModalOpen,
+        setEditCategoryModalOpen,
+        categoryNameToEdit,
+        setCategoryNameToEdit,
+      }}
+    >
       {children}
-    </Context.Provider>
+    </CategoriesContext.Provider>
   );
 }

@@ -1,13 +1,22 @@
 import { useContext } from "react";
-import { Context } from "../../Context";
+import { CategoriesContext } from "../../context/CategoriesContext";
 import ExpandableList from "../ExpandableList";
 
 export default function CategoriesExpense() {
-  const { categoriesExpense } = useContext(Context);
+  const { categoriesExpense, setEditCategoryModalOpen, setCategoryNameToEdit } =
+    useContext(CategoriesContext);
+
+  function handleEdit(item) {
+    setCategoryNameToEdit(item.name);
+    setEditCategoryModalOpen(true);
+  }
 
   return (
     <div>
-      <ExpandableList items={categoriesExpense} />
+      <ExpandableList
+        items={categoriesExpense}
+        onEdit={(item) => handleEdit(item)}
+      />
     </div>
   );
 }

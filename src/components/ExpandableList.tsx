@@ -1,6 +1,6 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export default function ExpandableList({ items }) {
+export default function ExpandableList({ items, onEdit }) {
   return (
     <>
       <ul role="list" className="divide-y divide-gray-200">
@@ -12,7 +12,11 @@ export default function ExpandableList({ items }) {
                 type="button"
                 className="ml-auto flex items-center rounded-full p-1 text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
-                <PencilIcon className="h-5 w-5" aria-hidden="true" />
+                <PencilIcon
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                  onClick={() => onEdit(item)}
+                />
               </button>
               <button
                 type="button"

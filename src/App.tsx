@@ -20,12 +20,13 @@ import Categories from "./components/categories/Categories";
 import Transactions from "./components/Transactions";
 import CategoriesExpense from "./components/categories/CategoriesExpense";
 import CategoriesIncome from "./components/categories/CategoriesIncome";
+import { CategoriesContextProvider } from "./context/CategoriesContext";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
   {
     name: "Categories",
-    href: "/categories",
+    href: "/categories/income",
     icon: RectangleGroupIcon,
   },
   {
@@ -195,7 +196,14 @@ export default function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/categories" element={<Categories />}>
+            <Route
+              path="/categories"
+              element={
+                <CategoriesContextProvider>
+                  <Categories />
+                </CategoriesContextProvider>
+              }
+            >
               <Route path="income" element={<CategoriesIncome />} />
               <Route path="expence" element={<CategoriesExpense />} />
             </Route>
