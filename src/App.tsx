@@ -205,7 +205,7 @@ export default function App() {
               }
             >
               <Route path="income" element={<CategoriesIncome />} />
-              <Route path="expence" element={<CategoriesExpense />} />
+              <Route path="expense" element={<CategoriesExpense />} />
             </Route>
             <Route path="/transactions" element={<Transactions />} />
           </Routes>

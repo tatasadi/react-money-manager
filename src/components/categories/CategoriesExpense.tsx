@@ -3,12 +3,12 @@ import { CategoriesContext } from "../../context/CategoriesContext";
 import ExpandableList from "../ExpandableList";
 
 export default function CategoriesExpense() {
-  const { categoriesExpense, setEditCategoryModalOpen, setCategoryNameToEdit } =
+  const { categoriesExpense, updateEditCategoryModalOpen, editCategory } =
     useContext(CategoriesContext);
 
   function handleEdit(item) {
-    setCategoryNameToEdit(item.name);
-    setEditCategoryModalOpen(true);
+    editCategory(item);
+    updateEditCategoryModalOpen(true);
   }
 
   return (

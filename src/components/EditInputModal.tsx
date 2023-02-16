@@ -1,14 +1,13 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
-export default function EditInputModal({
-  open,
-  onClose,
-  inputValue,
-  setInputValue,
-  onSave,
-}) {
+export default function EditInputModal({ open, onClose, inputValue, onSave }) {
   const cancelButtonRef = useRef(null);
+  const [value, setValue] = useState(inputValue);
+
+  useEffect(() => {
+    setValue(inputValue);
+  }, [inputValue]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -50,14 +49,14 @@ export default function EditInputModal({
                     >
                       Edit Category
                     </Dialog.Title>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        <input
-                          type="text"
-                          value={inputValue}
-                          onChange={(e) => setInputValue(e.target.value)}
-                        />
-                      </p>
+
+                    <div className="mt-1 sm:col-span-2 sm:mt-0">
+                      <input
+                        type="text"
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        className="block w-full rounded-md border-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
                     </div>
                   </div>
                 </div>
@@ -65,14 +64,17 @@ export default function EditInputModal({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-                    onClick={() => onSave(value)}
+                    onClick={() => {
+                      onSave(value);
+                      onClose();
+                    }}
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
-                    onClick={() => onClose(false)}
+                    onClick={onClose}
                     ref={cancelButtonRef}
                   >
                     Cancel

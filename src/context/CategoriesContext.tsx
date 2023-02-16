@@ -28,7 +28,40 @@ export function CategoriesContextProvider({ children }) {
   );
 
   const [editCategoryModalOpen, setEditCategoryModalOpen] = useState(false);
-  const [categoryNameToEdit, setCategoryNameToEdit] = useState("");
+  const [categoryToEdit, setCategoryToEdit] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("income");
+
+  function updateSelectedTab(newTab: string) {
+    setSelectedTab(newTab);
+  }
+
+  function updateEditCategoryModalOpen(isOpen: boolean) {
+    setEditCategoryModalOpen(isOpen);
+  }
+
+  function editCategory(category) {
+    setCategoryToEdit(category);
+  }
+
+  function updateCategory(newCategoryName) {
+    switch (selectedTab) {
+      case "income":
+        setCategoriesIncome((prevCategories) =>
+          prevCategories.map((c) =>
+            c.id === categoryToEdit.id ? { ...c, name: newCategoryName } : c
+          )
+        );
+        break;
+      case "expense":
+        setCategoriesExpense((prevCategories) =>
+          prevCategories.map((c) =>
+            c.id === categoryToEdit.id ? { ...c, name: newCategoryName } : c
+          )
+        );
+        break;
+    }
+    console.log(selectedTab, newCategoryName, categoryToEdit);
+  }
 
   return (
     <CategoriesContext.Provider
@@ -36,9 +69,12 @@ export function CategoriesContextProvider({ children }) {
         categoriesIncome,
         categoriesExpense,
         editCategoryModalOpen,
-        setEditCategoryModalOpen,
-        categoryNameToEdit,
-        setCategoryNameToEdit,
+        updateEditCategoryModalOpen,
+        categoryToEdit,
+        editCategory,
+        updateCategory,
+        selectedTab,
+        updateSelectedTab,
       }}
     >
       {children}

@@ -3,19 +3,20 @@ import { classNames } from "../../utils";
 import { CategoriesContextProvider } from "../../context/CategoriesContext";
 import EditInputModal from "../EditInputModal";
 import { CategoriesContext } from "../../context/CategoriesContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const tabs = [
   { name: "Income", href: "income" },
-  { name: "Expence", href: "expence" },
+  { name: "Expense", href: "expense" },
 ];
 
 export default function Categories() {
   const {
+    categoryToEdit,
+    updateCategory,
     editCategoryModalOpen,
-    setEditCategoryModalOpen,
-    categoryNameToEdit,
-    setCategoryNameToEdit,
+    updateEditCategoryModalOpen,
+    updateSelectedTab,
   } = useContext(CategoriesContext);
 
   const { pathname } = useLocation();
@@ -23,6 +24,12 @@ export default function Categories() {
 
   function handleSelectChange(e) {
     navigate(e.target.value.toLowerCase());
+  }
+
+  console.log(pathname);
+  if (pathname === "/categories/expense") {
+    updateSelectedTab("expense");
+    console.log("update selected tab to expense");
   }
 
   return (
@@ -70,6 +77,9 @@ export default function Categories() {
                             ? "page"
                             : undefined
                         }
+                        onClick={() =>
+                          updateSelectedTab(tab.href.toLocaleLowerCase())
+                        }
                       >
                         {tab.name}
                       </Link>
@@ -84,10 +94,9 @@ export default function Categories() {
       </div>
       <EditInputModal
         open={editCategoryModalOpen}
-        onClose={() => setEditCategoryModalOpen(false)}
-        inputValue={categoryNameToEdit}
-        setInputValue={setCategoryNameToEdit}
-        onSave={(newValue) => setCategoryNameToEdit(newValue)} // TODO: here updateCategory
+        onClose={() => updateEditCategoryModalOpen(false)}
+        inputValue={categoryToEdit?.name}
+        onSave={(newValue) => updateCategory(newValue)}
       />
     </>
   );
