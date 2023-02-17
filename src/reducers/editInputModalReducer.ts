@@ -1,14 +1,14 @@
 export interface EditInputModalState {
   open: boolean;
   inputValue: string;
-  onSaveCallback: () => void;
+  editCompleted: boolean;
 }
 
 export enum EditInputModalActions {
   Open,
   Close,
   UpdateInput,
-  setOnSaveCallback,
+  SetEditCompleted,
 }
 
 export default function editInputModalReducer(
@@ -22,10 +22,10 @@ export default function editInputModalReducer(
       return { ...state, open: false };
     case EditInputModalActions.UpdateInput:
       return { ...state, inputValue: action.payload };
-    case EditInputModalActions.setOnSaveCallback:
+    case EditInputModalActions.SetEditCompleted:
       return {
         ...state,
-        onSaveCallback: action.payload(state.inputValue),
+        editCompleted: action.payload,
       };
     default:
       throw new Error("Unhandled EditINputModal action " + action.type);

@@ -19,6 +19,16 @@ export default function EditInputModal({
     console.log("pinned state editinputmodal", editInputModalState);
   }, [editInputModalState]);
 
+  useEffect(() => {
+    if (editInputModalState.Open) {
+      console.log("Modal Opened", editInputModalState);
+      editInputModalDispatch({
+        type: EditInputModalActions.SetEditCompleted,
+        payload: false,
+      });
+    }
+  }, [editInputModalState.Open]);
+
   function handleClose() {
     editInputModalDispatch({
       type: EditInputModalActions.Close,
@@ -29,6 +39,10 @@ export default function EditInputModal({
     editInputModalDispatch({
       type: EditInputModalActions.UpdateInput,
       payload: value,
+    });
+    editInputModalDispatch({
+      type: EditInputModalActions.SetEditCompleted,
+      payload: true,
     });
     handleClose();
   }

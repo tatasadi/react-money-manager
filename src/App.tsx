@@ -87,6 +87,7 @@ try {
 let initialEditInputModalState: EditInputModalState = {
   open: false,
   inputValue: "",
+  editCompleted: false,
 };
 
 export default function App() {
@@ -270,6 +271,7 @@ export default function App() {
                   <CategoriesIncome
                     state={categoriesState}
                     dispatch={categoriesDispatch}
+                    editInputModalState={editInputModalState}
                     editInputModalDispatch={editInputModalDispatch}
                   />
                 }

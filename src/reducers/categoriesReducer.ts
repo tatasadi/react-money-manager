@@ -7,13 +7,13 @@ export interface CategoriesState {
   selectedTab: string;
   categoriesIncome: Category[];
   categoriesExpense: Category[];
-  currentEditingId: string;
+  currentEditingCategory: Category;
 }
 
 export enum CategoriesActions {
   UpdateSelectedTab,
   UpdateCategory,
-  UpdateCurrentEditingId,
+  UpdateCurrentEditingCategory,
 }
 
 export default function categoriesReducer(state: CategoriesState, action) {
@@ -21,22 +21,28 @@ export default function categoriesReducer(state: CategoriesState, action) {
     case CategoriesActions.UpdateSelectedTab:
       return { ...state, selectedTab: action.payload };
     case CategoriesActions.UpdateCategory:
-      switch (action.payload.categoryType) {
+      switch (state.selectedTab) {
         case "income":
-          return state.categoriesIncome.map((c) =>
-            c.id === action.payload.id
-              ? { ...c, name: action.payload.newName }
-              : c
-          );
+          return {
+            ...state,
+            categoriesIncome: state.categoriesIncome.map((c) =>
+              c.id === state.currentEditingCategory?.id
+                ? { ...c, name: action.payload }
+                : c
+            ),
+          };
         case "expense":
-          return state.categoriesExpense.map((c) =>
-            c.id === action.payload.id
-              ? { ...c, name: action.payload.newName }
-              : c
-          );
+          return {
+            ...state,
+            categoriesExpense: state.categoriesExpense.map((c) =>
+              c.id === state.currentEditingCategory?.id
+                ? { ...c, name: action.payload }
+                : c
+            ),
+          };
       }
-    case CategoriesActions.UpdateCurrentEditingId:
-      return { ...state, currentEditingId: action.payload };
+    case CategoriesActions.UpdateCurrentEditingCategory:
+      return { ...state, currentEditingCategory: action.payload };
     default:
       throw new Error("Unhandled categories action " + action.type);
   }
