@@ -82,14 +82,12 @@ export default function EditInputModal({
                       Edit Category
                     </Dialog.Title>
 
-                    <div className="mt-1 sm:col-span-2 sm:mt-0">
-                      <input
-                        type="text"
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
-                        className="block w-full rounded-md border-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                      className="block w-full p-2 mt-10 rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
+                    />
                   </div>
                 </div>
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
