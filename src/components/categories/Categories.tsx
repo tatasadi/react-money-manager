@@ -1,35 +1,52 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { classNames } from "../../utils";
-import { CategoriesContextProvider } from "../../context/CategoriesContext";
-import EditInputModal from "../EditInputModal";
-import { CategoriesContext } from "../../context/CategoriesContext";
-import { useContext, useState } from "react";
+import { useEffect } from "react";
+import { CategoriesActions } from "../../reducers/categoriesReducer";
 
 const tabs = [
   { name: "Income", href: "income" },
   { name: "Expense", href: "expense" },
 ];
 
-export default function Categories() {
-  const {
-    categoryToEdit,
-    updateCategory,
-    editCategoryModalOpen,
-    updateEditCategoryModalOpen,
-    updateSelectedTab,
-  } = useContext(CategoriesContext);
+export default function Categories({ state, dispatch }) {
+  useEffect(
+    () =>
+      localStorage.setItem(
+        "categories_income",
+        JSON.stringify(state.categoriesIncome)
+      ),
+    [state.categoriesIncome]
+  );
+
+  useEffect(
+    () =>
+      localStorage.setItem(
+        "categories_expense",
+        JSON.stringify(state.categoriesExpense)
+      ),
+    [state.categoriesExpense]
+  );
+
+  useEffect(() => {
+    if (pathname === "/categories/expense") {
+      dispatch({
+        type: CategoriesActions.UpdateSelectedTab,
+        payload: "expense",
+      });
+      console.log("update selected tab to expense");
+    }
+  }, []);
+
+  // for debugging
+  useEffect(() => {
+    console.log("pinned state", state);
+  }, [state]);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   function handleSelectChange(e) {
     navigate(e.target.value.toLowerCase());
-  }
-
-  console.log(pathname);
-  if (pathname === "/categories/expense") {
-    updateSelectedTab("expense");
-    console.log("update selected tab to expense");
   }
 
   return (
@@ -78,7 +95,10 @@ export default function Categories() {
                             : undefined
                         }
                         onClick={() =>
-                          updateSelectedTab(tab.href.toLocaleLowerCase())
+                          dispatch({
+                            type: CategoriesActions.UpdateSelectedTab,
+                            payload: tab.href.toLocaleLowerCase(),
+                          })
                         }
                       >
                         {tab.name}
@@ -92,12 +112,6 @@ export default function Categories() {
           </div>
         </div>
       </div>
-      <EditInputModal
-        open={editCategoryModalOpen}
-        onClose={() => updateEditCategoryModalOpen(false)}
-        inputValue={categoryToEdit?.name}
-        onSave={(newValue) => updateCategory(newValue)}
-      />
     </>
   );
 }

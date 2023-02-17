@@ -1,21 +1,25 @@
-import { useContext } from "react";
-import { CategoriesContext } from "../../context/CategoriesContext";
+import { Category } from "../../reducers/categoriesReducer";
+import { EditInputModalActions } from "../../reducers/editInputModalReducer";
 import ExpandableList from "../ExpandableList";
 
-export default function CategoriesExpense() {
-  const { categoriesExpense, updateEditCategoryModalOpen, editCategory } =
-    useContext(CategoriesContext);
-
-  function handleEdit(item) {
-    editCategory(item);
-    updateEditCategoryModalOpen(true);
+export default function CategoriesExpense({
+  state,
+  dispatch,
+  editInputModalDispatch,
+}) {
+  function handleEdit(item: Category) {
+    editInputModalDispatch({
+      type: EditInputModalActions.UpdateInput,
+      payload: item.name,
+    });
+    editInputModalDispatch({ type: EditInputModalActions.Open });
   }
 
   return (
     <div>
       <ExpandableList
-        items={categoriesExpense}
-        onEdit={(item) => handleEdit(item)}
+        items={state.categoriesExpense}
+        onEdit={(item: Category) => handleEdit(item)}
       />
     </div>
   );

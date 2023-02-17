@@ -1,21 +1,45 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { EditInputModalActions } from "../reducers/editInputModalReducer";
 
-export default function EditInputModal({ open, onClose, inputValue, onSave }) {
+export default function EditInputModal({
+  editInputModalState,
+  editInputModalDispatch,
+}) {
   const cancelButtonRef = useRef(null);
-  const [value, setValue] = useState(inputValue);
+
+  const [value, setValue] = useState(editInputModalState.inputValue);
 
   useEffect(() => {
-    setValue(inputValue);
-  }, [inputValue]);
+    setValue(editInputModalState.inputValue);
+  }, [editInputModalState.inputValue]);
+
+  // for debugging
+  useEffect(() => {
+    console.log("pinned state editinputmodal", editInputModalState);
+  }, [editInputModalState]);
+
+  function handleClose() {
+    editInputModalDispatch({
+      type: EditInputModalActions.Close,
+    });
+  }
+
+  function handleSave() {
+    editInputModalDispatch({
+      type: EditInputModalActions.UpdateInput,
+      payload: value,
+    });
+    handleClose();
+  }
 
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={editInputModalState.open} as={Fragment}>
       <Dialog
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={onClose}
+        onClose={handleClose}
       >
         <Transition.Child
           as={Fragment}
@@ -64,17 +88,14 @@ export default function EditInputModal({ open, onClose, inputValue, onSave }) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-                    onClick={() => {
-                      onSave(value);
-                      onClose();
-                    }}
+                    onClick={handleSave}
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
-                    onClick={onClose}
+                    onClick={handleClose}
                     ref={cancelButtonRef}
                   >
                     Cancel
