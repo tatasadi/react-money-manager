@@ -33,14 +33,8 @@ export default function Categories({ state, dispatch }) {
         type: CategoriesActions.UpdateSelectedTab,
         payload: "expense",
       });
-      console.log("update selected tab to expense");
     }
   }, []);
-
-  // for debugging
-  useEffect(() => {
-    console.log("pinned state", state);
-  }, [state]);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();

@@ -3,8 +3,8 @@ import { CategoriesActions, Category } from "../../reducers/categoriesReducer";
 import { EditInputModalActions } from "../../reducers/editInputModalReducer";
 import ExpandableList from "../ExpandableList";
 
-export default function CategoriesIncome({
-  state,
+export default function CategoriesTab({
+  items,
   dispatch,
   editInputModalState,
   editInputModalDispatch,
@@ -16,7 +16,6 @@ export default function CategoriesIncome({
   }, [editInputModalState.editCompleted]);
 
   function updateCategory(newName: string) {
-    console.log("update category is called!", newName);
     dispatch({
       type: CategoriesActions.UpdateCategory,
       payload: newName,
@@ -40,11 +39,9 @@ export default function CategoriesIncome({
   }
 
   return (
-    <div>
-      <ExpandableList
-        items={state.categoriesIncome}
-        onEdit={(item: Category) => handleEdit(item)}
-      />
-    </div>
+    <ExpandableList
+      items={items}
+      onEdit={(item: Category) => handleEdit(item)}
+    />
   );
 }

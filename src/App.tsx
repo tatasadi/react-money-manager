@@ -27,6 +27,7 @@ import EditInputModal from "./components/EditInputModal";
 import editInputModalReducer, {
   EditInputModalState,
 } from "./reducers/editInputModalReducer";
+import CategoriesTab from "./components/categories/CategoriesTab";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -268,8 +269,8 @@ export default function App() {
               <Route
                 path="income"
                 element={
-                  <CategoriesIncome
-                    state={categoriesState}
+                  <CategoriesTab
+                    items={categoriesState.categoriesIncome}
                     dispatch={categoriesDispatch}
                     editInputModalState={editInputModalState}
                     editInputModalDispatch={editInputModalDispatch}
@@ -279,9 +280,10 @@ export default function App() {
               <Route
                 path="expense"
                 element={
-                  <CategoriesExpense
-                    state={categoriesState}
+                  <CategoriesTab
+                    items={categoriesState.categoriesExpense}
                     dispatch={categoriesDispatch}
+                    editInputModalState={editInputModalState}
                     editInputModalDispatch={editInputModalDispatch}
                   />
                 }

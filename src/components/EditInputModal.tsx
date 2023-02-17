@@ -14,14 +14,8 @@ export default function EditInputModal({
     setValue(editInputModalState.inputValue);
   }, [editInputModalState.inputValue]);
 
-  // for debugging
-  useEffect(() => {
-    console.log("pinned state editinputmodal", editInputModalState);
-  }, [editInputModalState]);
-
   useEffect(() => {
     if (editInputModalState.Open) {
-      console.log("Modal Opened", editInputModalState);
       editInputModalDispatch({
         type: EditInputModalActions.SetEditCompleted,
         payload: false,
