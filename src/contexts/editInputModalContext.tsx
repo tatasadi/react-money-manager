@@ -7,6 +7,7 @@ const EditInputModalContext = createContext(null);
 
 let initialEditInputModalState: EditInputModalState = {
   open: false,
+  title: "",
   inputValue: "",
   editCompleted: false,
 };

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export interface Category {
   id: string;
   name: string;
@@ -39,6 +41,25 @@ export default function categoriesReducer(state: CategoriesState, action) {
                 ? { ...c, name: action.payload }
                 : c
             ),
+          };
+      }
+    case CategoriesActions.AddCategory:
+      switch (state.selectedTab) {
+        case "income":
+          return {
+            ...state,
+            categoriesIncome: [
+              ...state.categoriesIncome,
+              { id: uuidv4(), name: action.payload },
+            ],
+          };
+        case "expense":
+          return {
+            ...state,
+            categoriesExpense: [
+              ...state.categoriesExpense,
+              { id: uuidv4(), name: action.payload },
+            ],
           };
       }
     case CategoriesActions.UpdateCurrentEditingCategory:

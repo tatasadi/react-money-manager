@@ -77,7 +77,7 @@ export default function EditInputModal() {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Edit Category
+                      {editInputModalState.title}
                     </Dialog.Title>
 
                     <input

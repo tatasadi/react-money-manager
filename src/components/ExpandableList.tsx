@@ -32,11 +32,6 @@ export default function ExpandableList({ items, onEdit }) {
               </li>
             ))}
           </ul>
-          <div className="my-4 flex items-center justify-center">
-            <button className=" rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
-              Add New
-            </button>
-          </div>
         </>
       )}
     </>
