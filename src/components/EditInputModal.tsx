@@ -1,13 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { EditInputModalActions } from "../reducers/editInputModalReducer";
+import { useEditInputModal } from "../contexts/editInputModalContext";
 
-export default function EditInputModal({
-  editInputModalState,
-  editInputModalDispatch,
-}) {
+export default function EditInputModal() {
   const cancelButtonRef = useRef(null);
-
+  const { editInputModalState, editInputModalDispatch } = useEditInputModal();
   const [value, setValue] = useState(editInputModalState.inputValue);
 
   useEffect(() => {

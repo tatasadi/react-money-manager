@@ -13,21 +13,13 @@ import {
   RectangleGroupIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "./utils";
-
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Categories from "./components/categories/Categories";
 import Transactions from "./components/Transactions";
-import CategoriesExpense from "./components/categories/CategoriesExpense";
-import CategoriesIncome from "./components/categories/CategoriesIncome";
-import categoriesReducer, {
-  CategoriesState,
-} from "./reducers/categoriesReducer";
 import EditInputModal from "./components/EditInputModal";
-import editInputModalReducer, {
-  EditInputModalState,
-} from "./reducers/editInputModalReducer";
 import CategoriesTab from "./components/categories/CategoriesTab";
+import { useCategories } from "./contexts/categoriesContext";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -48,62 +40,10 @@ const navigation = [
   // { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
 ];
 
-let initialCategoriesState: CategoriesState = {
-  selectedTab: "income",
-  categoriesIncome: [
-    { id: "48299da5-b1eb-4fd1-82d1-d58e9f3c71ed", name: "Salary" },
-    { id: "434cd88f-288f-4aa0-a0f1-af6bee4d019e", name: "Financial Income" },
-    { id: "09fe9af8-f9b0-4bf4-8fcf-673e1d4efc55", name: "Other (Income)" },
-  ],
-  categoriesExpense: [
-    { id: "1e671ae1-429c-4e7f-b4a9-7fad95202bd0", name: "Home" },
-    { id: "ff8c7256-b3ea-42ea-b092-7218c3a1cddb", name: "Supermarket" },
-    { id: "30c38c18-ce5d-49f1-b5e2-15752613214b", name: "Eating Out" },
-    { id: "b183cd0c-b5e6-46dc-844b-f49171d0d708", name: "Clothing" },
-    { id: "e32c3003-dadf-4450-910a-151fb7e4bd6c", name: "Health" },
-    { id: "db365832-0b17-4ce2-8797-3bc0ce8cf0b6", name: "Travel" },
-    { id: "a992d9d0-2fb9-42dc-b012-4ba2e3df31a3", name: "Transportation" },
-    { id: "adef755b-7a3b-41ef-806e-dee157245c6b", name: "Gift" },
-    { id: "213de0f9-2d79-453d-82cc-95a1f192e58c", name: "Other (Expense)" },
-  ],
-};
-
-try {
-  const categoriesIncomeInLocalStorage = JSON.parse(
-    localStorage.getItem("categories_income")
-  );
-  if (categoriesIncomeInLocalStorage) {
-    initialCategoriesState.categoriesIncome = categoriesIncomeInLocalStorage;
-  }
-  const categoriesExpenseInLocalStorage = JSON.parse(
-    localStorage.getItem("categories_expense")
-  );
-  if (categoriesExpenseInLocalStorage) {
-    initialCategoriesState.categoriesExpense = categoriesExpenseInLocalStorage;
-  }
-} catch {
-  console.error("The categories could not be parsed into JSON.");
-}
-
-let initialEditInputModalState: EditInputModalState = {
-  open: false,
-  inputValue: "",
-  editCompleted: false,
-};
-
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [categoriesState, categoriesDispatch] = useReducer(
-    categoriesReducer,
-    initialCategoriesState
-  );
-
-  const [editInputModalState, editInputModalDispatch] = useReducer(
-    editInputModalReducer,
-    initialEditInputModalState
-  );
-
+  const { categoriesState } = useCategories();
   const { pathname } = useLocation();
 
   return (
@@ -257,35 +197,17 @@ export default function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route
-              path="/categories"
-              element={
-                <Categories
-                  state={categoriesState}
-                  dispatch={categoriesDispatch}
-                />
-              }
-            >
+            <Route path="/categories" element={<Categories />}>
               <Route
                 path="income"
                 element={
-                  <CategoriesTab
-                    items={categoriesState.categoriesIncome}
-                    dispatch={categoriesDispatch}
-                    editInputModalState={editInputModalState}
-                    editInputModalDispatch={editInputModalDispatch}
-                  />
+                  <CategoriesTab items={categoriesState.categoriesIncome} />
                 }
               />
               <Route
                 path="expense"
                 element={
-                  <CategoriesTab
-                    items={categoriesState.categoriesExpense}
-                    dispatch={categoriesDispatch}
-                    editInputModalState={editInputModalState}
-                    editInputModalDispatch={editInputModalDispatch}
-                  />
+                  <CategoriesTab items={categoriesState.categoriesExpense} />
                 }
               />
             </Route>
@@ -293,10 +215,7 @@ export default function App() {
           </Routes>
         </main>
       </div>
-      <EditInputModal
-        editInputModalState={editInputModalState}
-        editInputModalDispatch={editInputModalDispatch}
-      />
+      <EditInputModal />
     </>
   );
 }

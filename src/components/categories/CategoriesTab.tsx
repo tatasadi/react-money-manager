@@ -1,14 +1,14 @@
 import { useEffect } from "react";
+import { useCategories } from "../../contexts/categoriesContext";
+import { useEditInputModal } from "../../contexts/editInputModalContext";
 import { CategoriesActions, Category } from "../../reducers/categoriesReducer";
 import { EditInputModalActions } from "../../reducers/editInputModalReducer";
 import ExpandableList from "../ExpandableList";
 
-export default function CategoriesTab({
-  items,
-  dispatch,
-  editInputModalState,
-  editInputModalDispatch,
-}) {
+export default function CategoriesTab({ items }) {
+  const { categoriesDispatch } = useCategories();
+  const { editInputModalState, editInputModalDispatch } = useEditInputModal();
+
   useEffect(() => {
     if (editInputModalState.inputValue && editInputModalState.editCompleted) {
       updateCategory(editInputModalState.inputValue);
@@ -16,7 +16,7 @@ export default function CategoriesTab({
   }, [editInputModalState.editCompleted]);
 
   function updateCategory(newName: string) {
-    dispatch({
+    categoriesDispatch({
       type: CategoriesActions.UpdateCategory,
       payload: newName,
     });
@@ -27,7 +27,7 @@ export default function CategoriesTab({
   }
 
   function handleEdit(item: Category) {
-    dispatch({
+    categoriesDispatch({
       type: CategoriesActions.UpdateCurrentEditingCategory,
       payload: item,
     });

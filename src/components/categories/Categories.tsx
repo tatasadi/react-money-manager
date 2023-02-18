@@ -2,34 +2,19 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { classNames } from "../../utils";
 import { useEffect } from "react";
 import { CategoriesActions } from "../../reducers/categoriesReducer";
+import { useCategories } from "../../contexts/categoriesContext";
 
 const tabs = [
   { name: "Income", href: "income" },
   { name: "Expense", href: "expense" },
 ];
 
-export default function Categories({ state, dispatch }) {
-  useEffect(
-    () =>
-      localStorage.setItem(
-        "categories_income",
-        JSON.stringify(state.categoriesIncome)
-      ),
-    [state.categoriesIncome]
-  );
-
-  useEffect(
-    () =>
-      localStorage.setItem(
-        "categories_expense",
-        JSON.stringify(state.categoriesExpense)
-      ),
-    [state.categoriesExpense]
-  );
+export default function Categories() {
+  const { categoriesDispatch } = useCategories();
 
   useEffect(() => {
     if (pathname === "/categories/expense") {
-      dispatch({
+      categoriesDispatch({
         type: CategoriesActions.UpdateSelectedTab,
         payload: "expense",
       });
@@ -89,7 +74,7 @@ export default function Categories({ state, dispatch }) {
                             : undefined
                         }
                         onClick={() =>
-                          dispatch({
+                          categoriesDispatch({
                             type: CategoriesActions.UpdateSelectedTab,
                             payload: tab.href.toLocaleLowerCase(),
                           })
