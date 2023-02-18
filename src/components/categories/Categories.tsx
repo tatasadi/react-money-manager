@@ -10,6 +10,8 @@ const tabs = [
 ];
 
 export default function Categories() {
+  //TODO there is an error in mobile size in select value
+
   const { categoriesDispatch } = useCategories();
 
   useEffect(() => {
@@ -25,7 +27,12 @@ export default function Categories() {
   const navigate = useNavigate();
 
   function handleSelectChange(e) {
-    navigate(e.target.value.toLowerCase());
+    const newTab = e.target.value.toLowerCase();
+    navigate(newTab);
+    categoriesDispatch({
+      type: CategoriesActions.UpdateSelectedTab,
+      payload: newTab,
+    });
   }
 
   return (
@@ -44,8 +51,10 @@ export default function Categories() {
                 <select
                   id="tabs"
                   name="tabs"
-                  className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                  defaultValue={pathname === "income" ? "Income" : "Expense"}
+                  className="block w-full p-2 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  defaultValue={
+                    pathname === "/categories/income" ? "Income" : "Expense"
+                  }
                   onChange={handleSelectChange}
                 >
                   {tabs.map((tab) => (

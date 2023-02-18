@@ -1,6 +1,6 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export default function ExpandableList({ items, onEdit }) {
+export default function ExpandableList({ items, onEdit, onDelete }) {
   return (
     <>
       {items && (
@@ -26,7 +26,11 @@ export default function ExpandableList({ items, onEdit }) {
                     type="button"
                     className="ml-2 flex items-center rounded-full p-1 text-red-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                    <TrashIcon
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                      onClick={() => onDelete(item)}
+                    />
                   </button>
                 </div>
               </li>

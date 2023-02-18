@@ -10,12 +10,16 @@ export interface CategoriesState {
   categoriesIncome: Category[];
   categoriesExpense: Category[];
   currentEditingCategory: Category;
+  currentDeletingCategory: Category;
 }
 
 export enum CategoriesActions {
   UpdateSelectedTab,
   UpdateCategory,
+  AddCategory,
   UpdateCurrentEditingCategory,
+  UpdateCurrentDeletingCategory,
+  DeleteCategory,
 }
 
 export default function categoriesReducer(state: CategoriesState, action) {
@@ -62,8 +66,28 @@ export default function categoriesReducer(state: CategoriesState, action) {
             ],
           };
       }
+
+    case CategoriesActions.DeleteCategory:
+      switch (state.selectedTab) {
+        case "income":
+          return {
+            ...state,
+            categoriesIncome: state.categoriesIncome.filter(
+              (c) => c.id !== state.currentDeletingCategory?.id
+            ),
+          };
+        case "expense":
+          return {
+            ...state,
+            categoriesExpense: state.categoriesExpense.filter(
+              (c) => c.id !== state.currentDeletingCategory?.id
+            ),
+          };
+      }
     case CategoriesActions.UpdateCurrentEditingCategory:
       return { ...state, currentEditingCategory: action.payload };
+    case CategoriesActions.UpdateCurrentDeletingCategory:
+      return { ...state, currentDeletingCategory: action.payload };
     default:
       throw new Error("Unhandled categories action " + action.type);
   }

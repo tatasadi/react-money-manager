@@ -17,9 +17,10 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Categories from "./components/categories/Categories";
 import Transactions from "./components/Transactions";
-import EditInputModal from "./components/EditInputModal";
+import EditInputModal from "./components/modals/EditInputModal";
 import CategoriesTab from "./components/categories/CategoriesTab";
 import { useCategories } from "./contexts/categoriesContext";
+import WarningConfirmModal from "./components/modals/WarningConfirmModal";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -216,6 +217,7 @@ export default function App() {
         </main>
       </div>
       <EditInputModal />
+      <WarningConfirmModal />
     </>
   );
 }

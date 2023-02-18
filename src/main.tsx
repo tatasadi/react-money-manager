@@ -5,14 +5,17 @@ import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { CategoriesProvider } from "./contexts/categoriesContext";
 import { EditInputModalProvider } from "./contexts/editInputModalContext";
+import { WarningConfirmModalProvider } from "./contexts/warningConfirmModalContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Router>
       <EditInputModalProvider>
-        <CategoriesProvider>
-          <App />
-        </CategoriesProvider>
+        <WarningConfirmModalProvider>
+          <CategoriesProvider>
+            <App />
+          </CategoriesProvider>
+        </WarningConfirmModalProvider>
       </EditInputModalProvider>
     </Router>
   </React.StrictMode>
