@@ -1,34 +1,56 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   ExclamationTriangleIcon,
+  InformationCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-  close as closeModalWithConfirm,
-  setConfirmed as setConfirmedModalWithConfirm,
-} from "../../redux/modalWithConfirmSlice";
+import { close, setConfirmed, updateInput } from "../../redux/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { ModalTypes } from "../../models/ModalTypes";
 
 //TODO consider modal type for icon and color
-export default function ModalWithConfirm() {
-  const modalWithConfrimState = useSelector(
-    (state: RootState) => state.modalWithConfirm
-  );
+export default function Modal() {
+  const [value, setValue] = useState("");
+
+  const modalState = useSelector((state: RootState) => state.modal);
   const dispatch = useDispatch();
 
+  const modalColor = modalState.type === ModalTypes.Warning ? "red" : "indigo";
+  const ModalIcon = () =>
+    modalState.type === ModalTypes.Warning ? (
+      <ExclamationTriangleIcon
+        className="h-6 w-6 text-red-600"
+        aria-hidden="true"
+      />
+    ) : (
+      <InformationCircleIcon
+        className="h-6 w-6 text-indigo-600"
+        aria-hidden="true"
+      />
+    );
+
+  useEffect(() => {
+    if (modalState.hasInput) {
+      setValue(modalState.inputValue ?? "");
+    }
+  }, [modalState.open]);
+
   function handleClose() {
-    dispatch(closeModalWithConfirm());
+    dispatch(close());
   }
 
   function handleConfirm() {
-    dispatch(setConfirmedModalWithConfirm(true));
+    dispatch(setConfirmed(true));
+    if (modalState.hasInput) {
+      dispatch(updateInput(value));
+    }
     handleClose();
   }
 
   return (
-    <Transition.Root show={modalWithConfrimState.open} as={Fragment}>
+    <Transition.Root show={modalState.open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={handleClose}>
         <Transition.Child
           as={Fragment}
@@ -65,33 +87,42 @@ export default function ModalWithConfirm() {
                   </button>
                 </div>
                 <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <ExclamationTriangleIcon
-                      className="h-6 w-6 text-red-600"
-                      aria-hidden="true"
-                    />
+                  <div
+                    className={`mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-${modalColor}-100 sm:mx-0 sm:h-10 sm:w-10`}
+                  >
+                    <ModalIcon />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      {modalWithConfrimState.title}
+                      {modalState.title}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {modalWithConfrimState.text}
-                      </p>
+                      <p className="text-sm text-gray-500">{modalState.text}</p>
+                      {modalState.hasInput && (
+                        <>
+                          <div className="w-full">
+                            <input
+                              type="text"
+                              value={value}
+                              onChange={(e) => setValue(e.target.value)}
+                              className="block w-full p-2 mt-2 rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    className={`inline-flex w-full justify-center rounded-md border border-transparent bg-${modalColor}-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-${modalColor}-700 focus:outline-none focus:ring-2 focus:ring-${modalColor}-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm`}
                     onClick={handleConfirm}
                   >
-                    {modalWithConfrimState.actionButtonText}
+                    {modalState.actionButtonText}
                   </button>
                   <button
                     type="button"

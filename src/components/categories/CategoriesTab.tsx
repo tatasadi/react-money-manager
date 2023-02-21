@@ -1,11 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEditInputModal } from "../../contexts/editInputModalContext";
-import {
-  EditInputModalActions,
-  EditInputModalOperations,
-} from "../../reducers/editInputModalReducer";
-import { WarningConfirmModalActions } from "../../reducers/warningConfirmModalReducer";
 import { RootState } from "../../redux/store";
 import ExpandableList from "../ExpandableList";
 import {
@@ -16,15 +10,13 @@ import {
   updateCurrentEditingCategory,
 } from "../../redux/categoriesSlice";
 import { Category } from "../../models/Category";
-import { ModalWithConfirmOperations } from "../../models/ModalWithConfirmOperations";
-import { open as openModalWithConfirm } from "../../redux/modalWithConfirmSlice";
-import { ModalWithConfirmTypes } from "../../models/ModalWithConfirmTypes";
+import { ModalOperations } from "../../models/ModalOperations";
+import { open as openModal } from "../../redux/modalSlice";
+import { ModalTypes } from "../../models/ModalTypes";
 
 export default function CategoriesTab() {
   const categoriesState = useSelector((state: RootState) => state.categories);
-  const modalWithConfirmState = useSelector(
-    (state: RootState) => state.modalWithConfirm
-  );
+  const modalState = useSelector((state: RootState) => state.modal);
 
   let items;
   if (categoriesState.selectedTab === "income") {
@@ -36,69 +28,64 @@ export default function CategoriesTab() {
   }
 
   const dispatch = useDispatch();
-  const { editInputModalState, editInputModalDispatch } = useEditInputModal();
 
   useEffect(() => {
-    if (editInputModalState.inputValue && editInputModalState.editCompleted) {
-      if (
-        editInputModalState.operation === EditInputModalOperations.AddCategory
-      ) {
-        dispatch(addCategory(editInputModalState.inputValue));
-      } else if (
-        editInputModalState.operation === EditInputModalOperations.EditCategory
-      ) {
-        dispatch(updateCategory(editInputModalState.inputValue));
+    if (modalState.confirmed) {
+      switch (modalState.operation) {
+        case ModalOperations.AddCategory:
+          if (modalState.inputValue)
+            dispatch(addCategory(modalState.inputValue));
+          break;
+        case ModalOperations.UpdateCategory:
+          if (modalState.inputValue)
+            dispatch(updateCategory(modalState.inputValue));
+          break;
+        case ModalOperations.DeleteCategory:
+          dispatch(deleteCategory());
+          break;
       }
-      editInputModalDispatch({
-        type: EditInputModalActions.SetEditCompleted,
-        payload: false,
-      });
     }
-  }, [editInputModalState.editCompleted]);
-
-  useEffect(() => {
-    if (
-      modalWithConfirmState.confirmed &&
-      modalWithConfirmState.operation ===
-        ModalWithConfirmOperations.DeleteCategory
-    ) {
-      dispatch(deleteCategory());
-    }
-  }, [modalWithConfirmState.confirmed]);
+  }, [modalState.confirmed]);
 
   function handleEdit(item: Category) {
     dispatch(updateCurrentEditingCategory(item));
-
-    editInputModalDispatch({
-      type: EditInputModalActions.Open,
-      payload: {
+    dispatch(
+      openModal({
         title: "Edit Category",
+        text: "Please give the category name.",
+        actionButtonText: "Save",
+        operation: ModalOperations.UpdateCategory,
+        type: ModalTypes.Info,
+        hasInput: true,
         inputValue: item.name,
-        operation: EditInputModalOperations.EditCategory,
-      },
-    });
+      })
+    );
   }
 
   function handleAdd() {
-    editInputModalDispatch({
-      type: EditInputModalActions.Open,
-      payload: {
+    dispatch(
+      openModal({
         title: "Add New Category",
+        text: "Please give the category name.",
+        actionButtonText: "Add",
+        operation: ModalOperations.AddCategory,
+        type: ModalTypes.Info,
+        hasInput: true,
         inputValue: "",
-        operation: EditInputModalOperations.AddCategory,
-      },
-    });
+      })
+    );
   }
 
   function handleDelete(item: Category) {
     dispatch(updateCurrentDeletingCategory(item));
     dispatch(
-      openModalWithConfirm({
+      openModal({
         title: "Delete Category",
-        text: `Are you sure you want to delete the category "${item.name}"`,
+        text: `Are you sure you want to delete the category "${item.name}"?`,
         actionButtonText: "Delete",
-        operation: ModalWithConfirmOperations.DeleteCategory,
-        type: ModalWithConfirmTypes.Warning,
+        operation: ModalOperations.DeleteCategory,
+        type: ModalTypes.Warning,
+        hasInput: false,
       })
     );
   }
