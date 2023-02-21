@@ -1,15 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEditInputModal } from "../../contexts/editInputModalContext";
-import { useWarningConfirmModal } from "../../contexts/warningConfirmModalContext";
 import {
   EditInputModalActions,
   EditInputModalOperations,
 } from "../../reducers/editInputModalReducer";
-import {
-  WarningConfirmModalActions,
-  WarningConfirmModalOperations,
-} from "../../reducers/warningConfirmModalReducer";
+import { WarningConfirmModalActions } from "../../reducers/warningConfirmModalReducer";
 import { RootState } from "../../redux/store";
 import ExpandableList from "../ExpandableList";
 import {
@@ -20,9 +16,15 @@ import {
   updateCurrentEditingCategory,
 } from "../../redux/categoriesSlice";
 import { Category } from "../../models/Category";
+import { ModalWithConfirmOperations } from "../../models/ModalWithConfirmOperations";
+import { open as openModalWithConfirm } from "../../redux/modalWithConfirmSlice";
+import { ModalWithConfirmTypes } from "../../models/ModalWithConfirmTypes";
 
 export default function CategoriesTab() {
   const categoriesState = useSelector((state: RootState) => state.categories);
+  const modalWithConfirmState = useSelector(
+    (state: RootState) => state.modalWithConfirm
+  );
 
   let items;
   if (categoriesState.selectedTab === "income") {
@@ -35,8 +37,6 @@ export default function CategoriesTab() {
 
   const dispatch = useDispatch();
   const { editInputModalState, editInputModalDispatch } = useEditInputModal();
-  const { warningConfirmModalState, warningConfirmModalDispatch } =
-    useWarningConfirmModal();
 
   useEffect(() => {
     if (editInputModalState.inputValue && editInputModalState.editCompleted) {
@@ -58,17 +58,13 @@ export default function CategoriesTab() {
 
   useEffect(() => {
     if (
-      warningConfirmModalState.confirmed &&
-      warningConfirmModalState.operation ===
-        WarningConfirmModalOperations.DeleteCategory
+      modalWithConfirmState.confirmed &&
+      modalWithConfirmState.operation ===
+        ModalWithConfirmOperations.DeleteCategory
     ) {
       dispatch(deleteCategory());
-      editInputModalDispatch({
-        type: WarningConfirmModalActions.SetConfirmed,
-        payload: false,
-      });
     }
-  }, [warningConfirmModalState.confirmed]);
+  }, [modalWithConfirmState.confirmed]);
 
   function handleEdit(item: Category) {
     dispatch(updateCurrentEditingCategory(item));
@@ -96,15 +92,15 @@ export default function CategoriesTab() {
 
   function handleDelete(item: Category) {
     dispatch(updateCurrentDeletingCategory(item));
-    warningConfirmModalDispatch({
-      type: WarningConfirmModalActions.Open,
-      payload: {
+    dispatch(
+      openModalWithConfirm({
         title: "Delete Category",
         text: `Are you sure you want to delete the category "${item.name}"`,
         actionButtonText: "Delete",
-        operation: WarningConfirmModalOperations.DeleteCategory,
-      },
-    });
+        operation: ModalWithConfirmOperations.DeleteCategory,
+        type: ModalWithConfirmTypes.Warning,
+      })
+    );
   }
 
   return (

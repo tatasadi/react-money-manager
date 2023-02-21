@@ -1,31 +1,34 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   ExclamationTriangleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useWarningConfirmModal } from "../../contexts/warningConfirmModalContext";
-import { WarningConfirmModalActions } from "../../reducers/warningConfirmModalReducer";
+import {
+  close as closeModalWithConfirm,
+  setConfirmed as setConfirmedModalWithConfirm,
+} from "../../redux/modalWithConfirmSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
-export default function WarningConfirmModal() {
-  const { warningConfirmModalState, warningConfirmModalDispatch } =
-    useWarningConfirmModal();
+//TODO consider modal type for icon and color
+export default function ModalWithConfirm() {
+  const modalWithConfrimState = useSelector(
+    (state: RootState) => state.modalWithConfirm
+  );
+  const dispatch = useDispatch();
 
   function handleClose() {
-    warningConfirmModalDispatch({
-      type: WarningConfirmModalActions.Close,
-    });
+    dispatch(closeModalWithConfirm());
   }
+
   function handleConfirm() {
-    warningConfirmModalDispatch({
-      type: WarningConfirmModalActions.SetConfirmed,
-      payload: true,
-    });
+    dispatch(setConfirmedModalWithConfirm(true));
     handleClose();
   }
 
   return (
-    <Transition.Root show={warningConfirmModalState.open} as={Fragment}>
+    <Transition.Root show={modalWithConfrimState.open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={handleClose}>
         <Transition.Child
           as={Fragment}
@@ -73,11 +76,11 @@ export default function WarningConfirmModal() {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      {warningConfirmModalState.title}
+                      {modalWithConfrimState.title}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        {warningConfirmModalState.text}
+                        {modalWithConfrimState.text}
                       </p>
                     </div>
                   </div>
@@ -88,7 +91,7 @@ export default function WarningConfirmModal() {
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={handleConfirm}
                   >
-                    {warningConfirmModalState.actionButtonText}
+                    {modalWithConfrimState.actionButtonText}
                   </button>
                   <button
                     type="button"

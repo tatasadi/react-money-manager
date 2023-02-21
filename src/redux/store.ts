@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import categoriesReducer from "./categoriesSlice";
+import modalWithConfirmReducer from "./modalWithConfirmSlice";
 
 export const store = configureStore({
   reducer: {
     categories: categoriesReducer,
+    modalWithConfirm: modalWithConfirmReducer,
   },
 });
 

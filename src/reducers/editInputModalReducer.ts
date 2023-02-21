@@ -41,6 +41,6 @@ export default function editInputModalReducer(
         editCompleted: action.payload,
       };
     default:
-      throw new Error("Unhandled EditINputModal action " + action.type);
+      throw new Error("Unhandled ModalWithInput action " + action.type);
   }
 }
