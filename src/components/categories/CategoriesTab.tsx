@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useCategories } from "../../contexts/categoriesContext";
+import { useDispatch, useSelector } from "react-redux";
 import { useEditInputModal } from "../../contexts/editInputModalContext";
 import { useWarningConfirmModal } from "../../contexts/warningConfirmModalContext";
-import { CategoriesActions, Category } from "../../reducers/categoriesReducer";
 import {
   EditInputModalActions,
   EditInputModalOperations,
@@ -11,10 +10,30 @@ import {
   WarningConfirmModalActions,
   WarningConfirmModalOperations,
 } from "../../reducers/warningConfirmModalReducer";
+import { RootState } from "../../redux/store";
 import ExpandableList from "../ExpandableList";
+import {
+  addCategory,
+  deleteCategory,
+  updateCategory,
+  updateCurrentDeletingCategory,
+  updateCurrentEditingCategory,
+} from "../../redux/categoriesSlice";
+import { Category } from "../../models/Category";
 
-export default function CategoriesTab({ items }) {
-  const { categoriesState, categoriesDispatch } = useCategories();
+export default function CategoriesTab() {
+  const categoriesState = useSelector((state: RootState) => state.categories);
+
+  let items;
+  if (categoriesState.selectedTab === "income") {
+    items = categoriesState.categoriesIncome;
+    localStorage.setItem("categories_income", JSON.stringify(items));
+  } else if (categoriesState.selectedTab === "expense") {
+    items = categoriesState.categoriesExpense;
+    localStorage.setItem("categories_expense", JSON.stringify(items));
+  }
+
+  const dispatch = useDispatch();
   const { editInputModalState, editInputModalDispatch } = useEditInputModal();
   const { warningConfirmModalState, warningConfirmModalDispatch } =
     useWarningConfirmModal();
@@ -24,17 +43,11 @@ export default function CategoriesTab({ items }) {
       if (
         editInputModalState.operation === EditInputModalOperations.AddCategory
       ) {
-        categoriesDispatch({
-          type: CategoriesActions.AddCategory,
-          payload: editInputModalState.inputValue,
-        });
+        dispatch(addCategory(editInputModalState.inputValue));
       } else if (
         editInputModalState.operation === EditInputModalOperations.EditCategory
       ) {
-        categoriesDispatch({
-          type: CategoriesActions.UpdateCategory,
-          payload: editInputModalState.inputValue,
-        });
+        dispatch(updateCategory(editInputModalState.inputValue));
       }
       editInputModalDispatch({
         type: EditInputModalActions.SetEditCompleted,
@@ -49,10 +62,7 @@ export default function CategoriesTab({ items }) {
       warningConfirmModalState.operation ===
         WarningConfirmModalOperations.DeleteCategory
     ) {
-      categoriesDispatch({
-        type: CategoriesActions.DeleteCategory,
-      });
-
+      dispatch(deleteCategory());
       editInputModalDispatch({
         type: WarningConfirmModalActions.SetConfirmed,
         payload: false,
@@ -60,16 +70,8 @@ export default function CategoriesTab({ items }) {
     }
   }, [warningConfirmModalState.confirmed]);
 
-  //debug
-  useEffect(() => {
-    console.log("categoriesState", categoriesState);
-  }, [categoriesState]);
-
   function handleEdit(item: Category) {
-    categoriesDispatch({
-      type: CategoriesActions.UpdateCurrentEditingCategory,
-      payload: item,
-    });
+    dispatch(updateCurrentEditingCategory(item));
 
     editInputModalDispatch({
       type: EditInputModalActions.Open,
@@ -93,11 +95,7 @@ export default function CategoriesTab({ items }) {
   }
 
   function handleDelete(item: Category) {
-    categoriesDispatch({
-      type: CategoriesActions.UpdateCurrentDeletingCategory,
-      payload: item,
-    });
-
+    dispatch(updateCurrentDeletingCategory(item));
     warningConfirmModalDispatch({
       type: WarningConfirmModalActions.Open,
       payload: {

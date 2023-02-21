@@ -1,8 +1,8 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { classNames } from "../../utils";
 import { useEffect } from "react";
-import { CategoriesActions } from "../../reducers/categoriesReducer";
-import { useCategories } from "../../contexts/categoriesContext";
+import { useDispatch } from "react-redux";
+import { updateSelectedTab } from "../../redux/categoriesSlice";
 
 const tabs = [
   { name: "Income", href: "income" },
@@ -10,16 +10,13 @@ const tabs = [
 ];
 
 export default function Categories() {
-  //TODO there is an error in mobile size in select value
+  const dispatch = useDispatch();
 
-  const { categoriesDispatch } = useCategories();
+  //TODO there is an error in mobile size in select value
 
   useEffect(() => {
     if (pathname === "/categories/expense") {
-      categoriesDispatch({
-        type: CategoriesActions.UpdateSelectedTab,
-        payload: "expense",
-      });
+      dispatch(updateSelectedTab("expense"));
     }
   }, []);
 
@@ -29,10 +26,7 @@ export default function Categories() {
   function handleSelectChange(e) {
     const newTab = e.target.value.toLowerCase();
     navigate(newTab);
-    categoriesDispatch({
-      type: CategoriesActions.UpdateSelectedTab,
-      payload: newTab,
-    });
+    dispatch(updateSelectedTab("expense"));
   }
 
   return (
@@ -83,10 +77,9 @@ export default function Categories() {
                             : undefined
                         }
                         onClick={() =>
-                          categoriesDispatch({
-                            type: CategoriesActions.UpdateSelectedTab,
-                            payload: tab.href.toLocaleLowerCase(),
-                          })
+                          dispatch(
+                            updateSelectedTab(tab.href.toLocaleLowerCase())
+                          )
                         }
                       >
                         {tab.name}

@@ -19,7 +19,6 @@ import Categories from "./components/categories/Categories";
 import Transactions from "./components/Transactions";
 import EditInputModal from "./components/modals/EditInputModal";
 import CategoriesTab from "./components/categories/CategoriesTab";
-import { useCategories } from "./contexts/categoriesContext";
 import WarningConfirmModal from "./components/modals/WarningConfirmModal";
 
 const navigation = [
@@ -44,7 +43,6 @@ const navigation = [
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const { categoriesState } = useCategories();
   const { pathname } = useLocation();
 
   return (
@@ -199,18 +197,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/categories" element={<Categories />}>
-              <Route
-                path="income"
-                element={
-                  <CategoriesTab items={categoriesState.categoriesIncome} />
-                }
-              />
-              <Route
-                path="expense"
-                element={
-                  <CategoriesTab items={categoriesState.categoriesExpense} />
-                }
-              />
+              <Route path="income" element={<CategoriesTab />} />
+              <Route path="expense" element={<CategoriesTab />} />
             </Route>
             <Route path="/transactions" element={<Transactions />} />
           </Routes>
