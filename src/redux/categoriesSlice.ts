@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 export interface CategoriesState {
   selectedTab: string;
   categoriesIncome: Category[];
-  categoriesExpense: Category[];
+  categoriesExpenses: Category[];
   currentEditingCategory?: Category;
   currentDeletingCategory?: Category;
 }
@@ -17,7 +17,7 @@ let initialState: CategoriesState = {
     { id: "434cd88f-288f-4aa0-a0f1-af6bee4d019e", name: "Financial Income" },
     { id: "09fe9af8-f9b0-4bf4-8fcf-673e1d4efc55", name: "Other (Income)" },
   ],
-  categoriesExpense: [
+  categoriesExpenses: [
     { id: "1e671ae1-429c-4e7f-b4a9-7fad95202bd0", name: "Home" },
     { id: "ff8c7256-b3ea-42ea-b092-7218c3a1cddb", name: "Supermarket" },
     { id: "30c38c18-ce5d-49f1-b5e2-15752613214b", name: "Eating Out" },
@@ -26,7 +26,7 @@ let initialState: CategoriesState = {
     { id: "db365832-0b17-4ce2-8797-3bc0ce8cf0b6", name: "Travel" },
     { id: "a992d9d0-2fb9-42dc-b012-4ba2e3df31a3", name: "Transportation" },
     { id: "adef755b-7a3b-41ef-806e-dee157245c6b", name: "Gift" },
-    { id: "213de0f9-2d79-453d-82cc-95a1f192e58c", name: "Other (Expense)" },
+    { id: "213de0f9-2d79-453d-82cc-95a1f192e58c", name: "Other (Expenses)" },
   ],
 };
 
@@ -37,11 +37,11 @@ try {
   if (categoriesIncomeInLocalStorage) {
     initialState.categoriesIncome = categoriesIncomeInLocalStorage;
   }
-  const categoriesExpenseInLocalStorage = JSON.parse(
-    localStorage.getItem("categories_expense")
+  const categoriesExpensesInLocalStorage = JSON.parse(
+    localStorage.getItem("categories_expenses")
   );
-  if (categoriesExpenseInLocalStorage) {
-    initialState.categoriesExpense = categoriesExpenseInLocalStorage;
+  if (categoriesExpensesInLocalStorage) {
+    initialState.categoriesExpenses = categoriesExpensesInLocalStorage;
   }
 } catch {
   console.error("The categories could not be parsed into JSON.");
@@ -67,8 +67,8 @@ export const categoriesSlice = createSlice({
               ? { ...c, name: action.payload }
               : c
           );
-        case "expense":
-          state.categoriesExpense = state.categoriesExpense.map((c) =>
+        case "expenses":
+          state.categoriesExpenses = state.categoriesExpenses.map((c) =>
             c.id === state.currentEditingCategory?.id
               ? { ...c, name: action.payload }
               : c
@@ -83,9 +83,9 @@ export const categoriesSlice = createSlice({
             ...state.categoriesIncome,
             { id: uuidv4(), name: action.payload },
           ];
-        case "expense":
-          state.categoriesExpense = [
-            ...state.categoriesExpense,
+        case "expenses":
+          state.categoriesExpenses = [
+            ...state.categoriesExpenses,
             { id: uuidv4(), name: action.payload },
           ];
       }
@@ -97,8 +97,8 @@ export const categoriesSlice = createSlice({
           state.categoriesIncome = state.categoriesIncome.filter(
             (c) => c.id !== state.currentDeletingCategory?.id
           );
-        case "expense":
-          state.categoriesExpense = state.categoriesExpense.filter(
+        case "expenses":
+          state.categoriesExpenses = state.categoriesExpenses.filter(
             (c) => c.id !== state.currentDeletingCategory?.id
           );
       }

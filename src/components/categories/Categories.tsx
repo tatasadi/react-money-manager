@@ -6,7 +6,7 @@ import Tabs from "../Tabs";
 
 const tabs = [
   { name: "Income", href: "income" },
-  { name: "Expense", href: "expense" },
+  { name: "Expenses", href: "expenses" },
 ];
 
 export default function Categories() {
@@ -14,7 +14,6 @@ export default function Categories() {
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
-  const selectValue = pathname === "/categories/income" ? "Income" : "Expense";
 
   useEffect(() => {
     if (pathname === "/categories") {
@@ -32,7 +31,7 @@ export default function Categories() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-semibold text-gray-900">Categories</h1>
       </div>
-      <Tabs tabs={tabs} selectValue={selectValue} updateTab={updateTab} />
+      <Tabs tabs={tabs} updateTab={updateTab} />
     </div>
   );
 }

@@ -22,9 +22,9 @@ export default function CategoriesTab() {
   if (categoriesState.selectedTab === "income") {
     items = categoriesState.categoriesIncome;
     localStorage.setItem("categories_income", JSON.stringify(items));
-  } else if (categoriesState.selectedTab === "expense") {
-    items = categoriesState.categoriesExpense;
-    localStorage.setItem("categories_expense", JSON.stringify(items));
+  } else if (categoriesState.selectedTab === "expenses") {
+    items = categoriesState.categoriesExpenses;
+    localStorage.setItem("categories_expenses", JSON.stringify(items));
   }
 
   const dispatch = useDispatch();

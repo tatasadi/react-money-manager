@@ -2,12 +2,15 @@ import { useEffect } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { classNames } from "../utils";
 
-export default function Tabs({ tabs, selectValue, updateTab }) {
+export default function Tabs({ tabs, updateTab }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const currentTab = pathname.split("/").at(-1) ?? "";
+  const selectValue = currentTab.charAt(0).toUpperCase() + currentTab.slice(1);
+
   useEffect(() => {
-    updateTab(pathname.split("/").at(-1));
+    updateTab(currentTab);
   }, []);
 
   function handleSelectChange(e) {

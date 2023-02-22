@@ -206,7 +206,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/categories" element={<Categories />}>
               <Route path="income" element={<CategoriesTab />} />
-              <Route path="expense" element={<CategoriesTab />} />
+              <Route path="expenses" element={<CategoriesTab />} />
             </Route>
             <Route path="/transactions" element={<Transactions />} />
           </Routes>
