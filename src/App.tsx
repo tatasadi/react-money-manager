@@ -13,7 +13,7 @@ import {
   RectangleGroupIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "./utils";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Categories from "./components/categories/Categories";
 import Transactions from "./components/transactions/Transactions";
@@ -24,7 +24,7 @@ const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
   {
     name: "Categories",
-    href: "/categories/income",
+    href: "/categories",
     icon: RectangleGroupIcon,
   },
   {
@@ -43,6 +43,15 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { pathname } = useLocation();
+
+  function isNavLinkActive(item) {
+    switch (item.name) {
+      case "Categories":
+        return pathname.includes(item.href);
+      default:
+        return pathname === item.href;
+    }
+  }
 
   return (
     <>
@@ -112,7 +121,7 @@ export default function App() {
                         key={item.name}
                         to={item.href}
                         className={classNames(
-                          item.current
+                          isNavLinkActive(item)
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "group flex items-center px-2 py-2 text-base font-medium rounded-md"
@@ -120,7 +129,7 @@ export default function App() {
                       >
                         <item.icon
                           className={classNames(
-                            item.current
+                            isNavLinkActive(item)
                               ? "text-gray-300"
                               : "text-gray-400 group-hover:text-gray-300",
                             "mr-4 flex-shrink-0 h-6 w-6"
@@ -159,7 +168,7 @@ export default function App() {
                   key={item.name}
                   to={item.href}
                   className={classNames(
-                    pathname === item.href
+                    isNavLinkActive(item)
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
                     "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
@@ -167,7 +176,7 @@ export default function App() {
                 >
                   <item.icon
                     className={classNames(
-                      pathname === item.href
+                      isNavLinkActive(item)
                         ? "text-gray-300"
                         : "text-gray-400 group-hover:text-gray-300",
                       "mr-3 flex-shrink-0 h-6 w-6"
