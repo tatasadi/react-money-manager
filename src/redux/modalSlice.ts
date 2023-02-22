@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ModalOperations } from "../models/ModalOperations";
 import { ModalTypes } from "../models/ModalTypes";
-import { Modal } from "../models/Model";
+import { Modal } from "../models/Modal";
 
 export interface ModalState {
   open: boolean;

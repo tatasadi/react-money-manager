@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import ExpandableList from "../ExpandableList";
+import CategoriesList from "./CategoriesList";
 import {
   addCategory,
   deleteCategory,
@@ -92,7 +92,7 @@ export default function CategoriesTab() {
 
   return (
     <>
-      <ExpandableList
+      <CategoriesList
         items={items}
         onEdit={(item: Category) => handleEdit(item)}
         onDelete={(item: Category) => handleDelete(item)}

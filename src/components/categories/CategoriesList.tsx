@@ -1,6 +1,6 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-export default function ExpandableList({ items, onEdit, onDelete }) {
+export default function CategoriesList({ items, onEdit, onDelete }) {
   return (
     <>
       {items && (

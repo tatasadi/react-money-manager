@@ -16,7 +16,7 @@ import { classNames } from "./utils";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Categories from "./components/categories/Categories";
-import Transactions from "./components/Transactions";
+import Transactions from "./components/transactions/Transactions";
 import CategoriesTab from "./components/categories/CategoriesTab";
 import Modal from "./components/modals/Modal";
 
