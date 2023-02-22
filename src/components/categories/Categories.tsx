@@ -11,17 +11,14 @@ const tabs = [
 
 export default function Categories() {
   const dispatch = useDispatch();
-
-  //TODO there is an error in mobile size in select value
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (pathname === "/categories/expense") {
       dispatch(updateSelectedTab("expense"));
     }
   }, []);
-
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
 
   function handleSelectChange(e) {
     const newTab = e.target.value.toLowerCase();
@@ -46,7 +43,7 @@ export default function Categories() {
                   id="tabs"
                   name="tabs"
                   className="block w-full p-2 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                  defaultValue={
+                  value={
                     pathname === "/categories/income" ? "Income" : "Expense"
                   }
                   onChange={handleSelectChange}

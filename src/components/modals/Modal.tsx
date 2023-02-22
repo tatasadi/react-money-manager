@@ -9,27 +9,38 @@ import { close, setConfirmed, updateInput } from "../../redux/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { ModalTypes } from "../../models/ModalTypes";
+import { classNames } from "../../utils";
 
-//TODO consider modal type for icon and color
+interface ModalIconProps {
+  type?: ModalTypes;
+}
+
+const ModalIcon = ({ type }: ModalIconProps) => {
+  switch (type) {
+    case ModalTypes.Warning:
+      return (
+        <ExclamationTriangleIcon
+          className="h-6 w-6 text-red-600"
+          aria-hidden="true"
+        />
+      );
+    case ModalTypes.Info:
+      return (
+        <InformationCircleIcon
+          className="h-6 w-6 text-indigo-600"
+          aria-hidden="true"
+        />
+      );
+    default:
+      return null;
+  }
+};
+
 export default function Modal() {
   const [value, setValue] = useState("");
 
   const modalState = useSelector((state: RootState) => state.modal);
   const dispatch = useDispatch();
-
-  const modalColor = modalState.type === ModalTypes.Warning ? "red" : "indigo";
-  const ModalIcon = () =>
-    modalState.type === ModalTypes.Warning ? (
-      <ExclamationTriangleIcon
-        className="h-6 w-6 text-red-600"
-        aria-hidden="true"
-      />
-    ) : (
-      <InformationCircleIcon
-        className="h-6 w-6 text-indigo-600"
-        aria-hidden="true"
-      />
-    );
 
   useEffect(() => {
     if (modalState.hasInput) {
@@ -75,7 +86,7 @@ export default function Modal() {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all w-4/5 sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
                   <button
                     type="button"
@@ -88,11 +99,16 @@ export default function Modal() {
                 </div>
                 <div className="sm:flex sm:items-start">
                   <div
-                    className={`mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-${modalColor}-100 sm:mx-0 sm:h-10 sm:w-10`}
+                    className={classNames(
+                      modalState.type === ModalTypes.Warning
+                        ? "bg-red-100"
+                        : "bg-indigo-100",
+                      "mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10"
+                    )}
                   >
-                    <ModalIcon />
+                    <ModalIcon type={modalState.type} />
                   </div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
@@ -119,7 +135,12 @@ export default function Modal() {
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md border border-transparent bg-${modalColor}-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-${modalColor}-700 focus:outline-none focus:ring-2 focus:ring-${modalColor}-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm`}
+                    className={classNames(
+                      modalState.type === ModalTypes.Warning
+                        ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+                        : "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500",
+                      "inline-flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    )}
                     onClick={handleConfirm}
                   >
                     {modalState.actionButtonText}
