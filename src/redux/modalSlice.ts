@@ -1,28 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ModalOperations } from "../models/ModalOperations";
-import { ModalTypes } from "../models/ModalTypes";
 import { Modal } from "../models/Modal";
-
-export interface ModalState {
-  open: boolean;
-  title: string;
-  text: string;
-  actionButtonText: string;
-  operation?: ModalOperations;
-  confirmed: boolean;
-  type?: ModalTypes;
-  hasInput: boolean;
-  inputValue?: string;
-}
-
-let initialState: ModalState = {
-  open: false,
-  title: "",
-  text: "",
-  actionButtonText: "",
-  confirmed: false,
-  hasInput: false,
-};
+import { modalInitialState as initialState } from "./initialState";
 
 export const ModalSlice = createSlice({
   name: "modal",

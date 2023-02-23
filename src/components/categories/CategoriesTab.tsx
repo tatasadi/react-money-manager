@@ -13,19 +13,24 @@ import { Category } from "../../models/Category";
 import { ModalOperations } from "../../models/ModalOperations";
 import { open as openModal } from "../../redux/modalSlice";
 import { ModalTypes } from "../../models/ModalTypes";
+import { CategoryType } from "../../models/CategoryType";
 
 export default function CategoriesTab() {
   const categoriesState = useSelector((state: RootState) => state.categories);
   const modalState = useSelector((state: RootState) => state.modal);
 
-  let items;
-  if (categoriesState.selectedTab === "income") {
-    items = categoriesState.categoriesIncome;
-    localStorage.setItem("categories_income", JSON.stringify(items));
-  } else if (categoriesState.selectedTab === "expenses") {
-    items = categoriesState.categoriesExpenses;
-    localStorage.setItem("categories_expenses", JSON.stringify(items));
-  }
+  localStorage.setItem(
+    "categories",
+    JSON.stringify(categoriesState.categories)
+  );
+
+  const items = categoriesState.categories.filter(
+    (c) =>
+      c.type ===
+      (categoriesState.selectedTab === "income"
+        ? CategoryType.Income
+        : CategoryType.Expense)
+  );
 
   const dispatch = useDispatch();
 
