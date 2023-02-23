@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import CategoriesList from "./CategoriesList";
 import {
   addCategory,
   deleteCategory,
@@ -14,6 +13,7 @@ import { ModalOperations } from "../../models/ModalOperations";
 import { open as openModal } from "../../redux/modalSlice";
 import { ModalTypes } from "../../models/ModalTypes";
 import { CategoryType } from "../../models/CategoryType";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function CategoriesTab() {
   const categoriesState = useSelector((state: RootState) => state.categories);
@@ -97,11 +97,41 @@ export default function CategoriesTab() {
 
   return (
     <>
-      <CategoriesList
-        items={items}
-        onEdit={(item: Category) => handleEdit(item)}
-        onDelete={(item: Category) => handleDelete(item)}
-      />
+      {items && (
+        <>
+          <ul role="list" className="divide-y divide-gray-200">
+            {items.map((item) => (
+              <li key={item.id} className="flex p-4 bg-white">
+                <div className="flex w-full">
+                  <p className="text-sm font-medium text-gray-900">
+                    {item.name}
+                  </p>
+                  <button
+                    type="button"
+                    className="ml-auto flex items-center rounded-full p-1 text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    <PencilIcon
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                      onClick={() => handleEdit(item)}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    className="ml-2 flex items-center rounded-full p-1 text-red-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    <TrashIcon
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                      onClick={() => handleDelete(item)}
+                    />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
       <div className="my-4 flex items-center justify-center">
         <button
           className=" rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
