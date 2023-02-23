@@ -1,6 +1,7 @@
 import { CategoriesState } from "../models/CategoriesState";
 import { CategoryType } from "../models/CategoryType";
 import { ModalState } from "../models/ModalState";
+import { TransactionsState } from "../models/TransactionsState";
 
 export const categoriesInitialState: CategoriesState = {
   selectedTab: "income",
@@ -75,4 +76,34 @@ export const modalInitialState: ModalState = {
   actionButtonText: "",
   confirmed: false,
   hasInput: false,
+};
+
+export const transactionsInitialState: TransactionsState = {
+  selectedTab: "all",
+  transactions: [
+    {
+      id: "f93735b9-1587-4c38-8225-a22f3d81c397",
+      name: "Salary of February",
+      category: "Salary",
+      type: CategoryType.Income,
+      amount: 2500,
+      date: "2023-02-23",
+    },
+    {
+      id: "78505e90-f43f-4e2f-a2af-61a4099a1bd9",
+      name: "REWE",
+      category: "Supermarket",
+      type: CategoryType.Expense,
+      amount: 34.43,
+      date: "2023-02-23",
+    },
+    {
+      id: "8740e191-f619-46e3-8359-3d4bccbd1074",
+      name: "Lidl",
+      category: "Supermarket",
+      type: CategoryType.Expense,
+      amount: 102.99,
+      date: "2023-02-12",
+    },
+  ],
 };

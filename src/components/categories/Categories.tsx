@@ -12,7 +12,6 @@ const tabs = [
 export default function Categories() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { pathname } = useLocation();
 
   useEffect(() => {

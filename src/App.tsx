@@ -19,6 +19,7 @@ import Categories from "./components/categories/Categories";
 import Transactions from "./components/transactions/Transactions";
 import CategoriesTab from "./components/categories/CategoriesTab";
 import Modal from "./components/modals/Modal";
+import TransactionsTab from "./components/transactions/TransactionsTab";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -47,6 +48,7 @@ export default function App() {
   function isNavLinkActive(item) {
     switch (item.name) {
       case "Categories":
+      case "Transactions":
         return pathname.includes(item.href);
       default:
         return pathname === item.href;
@@ -208,7 +210,11 @@ export default function App() {
               <Route path="income" element={<CategoriesTab />} />
               <Route path="expenses" element={<CategoriesTab />} />
             </Route>
-            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/transactions" element={<Transactions />}>
+              <Route path="all" element={<TransactionsTab />} />
+              <Route path="income" element={<TransactionsTab />} />
+              <Route path="expenses" element={<TransactionsTab />} />
+            </Route>
           </Routes>
         </main>
       </div>
