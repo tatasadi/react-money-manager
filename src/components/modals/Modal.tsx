@@ -124,7 +124,7 @@ export default function Modal() {
                               type="text"
                               value={value}
                               onChange={(e) => setValue(e.target.value)}
-                              className="block w-full p-2 mt-2 rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
+                              className="block w-full mt-2 rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
                             />
                           </div>
                         </>

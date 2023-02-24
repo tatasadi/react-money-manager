@@ -82,6 +82,22 @@ export const transactionsInitialState: TransactionsState = {
   selectedTab: "all",
   transactions: [
     {
+      id: "8808a818-c62f-49b4-a33a-9c7b68290e80",
+      name: "Ticket to berlin",
+      category: "Travel",
+      type: CategoryType.Expense,
+      amount: 69.99,
+      date: "2022-01-23",
+    },
+    {
+      id: "378bd806-0dd0-4e59-8fce-697dfe829eb2",
+      name: "Burger King",
+      category: "Eating Out",
+      type: CategoryType.Expense,
+      amount: 65.99,
+      date: "2022-12-12",
+    },
+    {
       id: "f93735b9-1587-4c38-8225-a22f3d81c397",
       name: "Salary of February",
       category: "Salary",
