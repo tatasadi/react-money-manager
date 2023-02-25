@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Transaction } from "../models/Transaction";
 import { transactionsInitialState } from "./initialState";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = transactionsInitialState;
 
@@ -21,9 +23,16 @@ export const transactionsSlice = createSlice({
     updateSelectedTab: (state, action: PayloadAction<string>) => {
       state.selectedTab = action.payload;
     },
+    createTransaction: (state, action: PayloadAction<Transaction>) => {
+      state.transactions = [
+        ...state.transactions,
+        { ...action.payload, id: uuidv4() },
+      ];
+    },
   },
 });
 
-export const { updateSelectedTab } = transactionsSlice.actions;
+export const { updateSelectedTab, createTransaction } =
+  transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

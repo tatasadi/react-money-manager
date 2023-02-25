@@ -1,13 +1,15 @@
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { CategoryType } from "../../models/CategoryType";
 import { FormStatusType } from "../../models/FormStatusType";
 import { classNames } from "../../utils";
+import { createTransaction } from "../../redux/transactionsSlice";
 
 export default function CreateTransactionModal() {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const [formState, setFormState] = useState({
     type: "",
@@ -76,11 +78,30 @@ export default function CreateTransactionModal() {
   }
 
   function handleSubmit(e) {
+    console.log("handle submit");
     e.preventDefault();
     setStatus(FormStatusType.Submitting);
     if (isValid) {
-      // dispatch add transaction
+      dispatch(
+        createTransaction({
+          id: "",
+          type:
+            formState.type === "income"
+              ? CategoryType.Income
+              : CategoryType.Expense,
+          category:
+            formState.type === "income"
+              ? formState.categoryIncome
+              : formState.categoryExpense,
+          description: formState.description,
+          amount: Number(formState.amount),
+          date: formState.date,
+        })
+      );
       setStatus(FormStatusType.Completed);
+      setOpen(false);
+    } else {
+      setStatus(FormStatusType.Submitted);
     }
   }
 
@@ -343,7 +364,6 @@ export default function CreateTransactionModal() {
                     <button
                       type="submit"
                       className="inline-flex w-fit justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                      onClick={() => setOpen(false)}
                     >
                       Save
                     </button>

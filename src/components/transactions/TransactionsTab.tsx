@@ -7,6 +7,7 @@ export default function TransactionsTab() {
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
   );
+  const categoriesState = useSelector((state: RootState) => state.categories);
 
   localStorage.setItem(
     "transactions",
@@ -41,10 +42,14 @@ export default function TransactionsTab() {
                 <div className="flex w-full items-end">
                   <div>
                     <div className="text-lg text-gray-900 flex items-center">
-                      <div className="font-bold">{item.name}</div>
+                      <div className="font-bold">{item.description}</div>
                       <div className="mx-2 text-sm text-gray-500">|</div>
                       <div className="text-sm text-gray-500">
-                        {item.category}
+                        {
+                          categoriesState.categories?.find(
+                            (c) => c.id === item.category
+                          )?.name
+                        }
                       </div>
                     </div>
                     <div className="text-sm text-gray-500">
