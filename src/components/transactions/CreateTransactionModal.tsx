@@ -6,11 +6,13 @@ import { RootState } from "../../redux/store";
 import { CategoryType } from "../../models/CategoryType";
 import { FormStatusType } from "../../models/FormStatusType";
 import { classNames } from "../../utils";
-import { createTransaction } from "../../redux/transactionsSlice";
+import { createTransaction, openModal } from "../../redux/transactionsSlice";
 
 export default function CreateTransactionModal() {
+  const transactionsState = useSelector(
+    (state: RootState) => state.transactions
+  );
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(true);
   const [formState, setFormState] = useState({
     type: "",
     categoryIncome: "",
@@ -99,15 +101,19 @@ export default function CreateTransactionModal() {
         })
       );
       setStatus(FormStatusType.Completed);
-      setOpen(false);
+      dispatch(openModal(false));
     } else {
       setStatus(FormStatusType.Submitted);
     }
   }
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={transactionsState.modalOpen} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={(e) => dispatch(openModal(e))}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -137,7 +143,7 @@ export default function CreateTransactionModal() {
                     <button
                       type="button"
                       className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      onClick={() => setOpen(false)}
+                      onClick={() => dispatch(openModal(false))}
                     >
                       <span className="sr-only">Close</span>
                       <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -295,6 +301,7 @@ export default function CreateTransactionModal() {
                               )}
                             </div>
                           </div>
+                          {/* FIXME: Amount accept just whole numbers! */}
                           <div className="sm:col-span-3">
                             <label
                               htmlFor="amount"

@@ -23,6 +23,9 @@ export const transactionsSlice = createSlice({
     updateSelectedTab: (state, action: PayloadAction<string>) => {
       state.selectedTab = action.payload;
     },
+    openModal: (state, action: PayloadAction<boolean>) => {
+      state.modalOpen = action.payload;
+    },
     createTransaction: (state, action: PayloadAction<Transaction>) => {
       state.transactions = [
         ...state.transactions,
@@ -32,7 +35,7 @@ export const transactionsSlice = createSlice({
   },
 });
 
-export const { updateSelectedTab, createTransaction } =
+export const { updateSelectedTab, createTransaction, openModal } =
   transactionsSlice.actions;
 
 export default transactionsSlice.reducer;
