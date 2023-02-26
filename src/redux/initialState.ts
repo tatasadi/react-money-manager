@@ -80,7 +80,9 @@ export const modalInitialState: ModalState = {
 
 export const transactionsInitialState: TransactionsState = {
   selectedTab: "all",
-  modalOpen: false,
+  modal: {
+    open: false,
+  },
   transactions: [
     {
       id: "8808a818-c62f-49b4-a33a-9c7b68290e80",

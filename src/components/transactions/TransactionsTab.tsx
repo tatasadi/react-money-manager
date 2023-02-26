@@ -1,9 +1,11 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CategoryType } from "../../models/CategoryType";
 import { RootState } from "../../redux/store";
 import { classNames, formatCurrency, formatDate } from "../../utils";
+import { openModalForUpdate } from "../../redux/transactionsSlice";
 
 export default function TransactionsTab() {
+  const dispatch = useDispatch();
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
   );
@@ -38,7 +40,11 @@ export default function TransactionsTab() {
         <>
           <ul role="list" className="divide-y divide-gray-200">
             {items.map((item) => (
-              <li key={item.id} className="flex p-4 bg-white">
+              <li
+                key={item.id}
+                className="flex p-4 bg-white cursor-pointer hover:bg-gray-100"
+                onClick={() => dispatch(openModalForUpdate(item))}
+              >
                 <div className="flex w-full items-end">
                   <div>
                     <div className="text-lg text-gray-900 flex items-center">

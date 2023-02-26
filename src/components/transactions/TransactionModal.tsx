@@ -6,23 +6,48 @@ import { RootState } from "../../redux/store";
 import { CategoryType } from "../../models/CategoryType";
 import { FormStatusType } from "../../models/FormStatusType";
 import { classNames } from "../../utils";
-import { createTransaction, openModal } from "../../redux/transactionsSlice";
+import {
+  createTransaction,
+  closeModal,
+  deleteTransaction,
+  updateTransaction,
+} from "../../redux/transactionsSlice";
 
-export default function CreateTransactionModal() {
+export default function TransactionModal() {
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
   );
+
   const dispatch = useDispatch();
-  const [formState, setFormState] = useState({
+  const emptyForm = {
     type: "",
     categoryIncome: "",
     categoryExpense: "",
     description: "",
     amount: "",
     date: "",
-  });
+  };
+  const [formState, setFormState] = useState(emptyForm);
   const [status, setStatus] = useState(FormStatusType.Idle);
   const [touched, setTouched] = useState({});
+  const [currentTransactionId, setCurrentTransactionId] = useState("");
+
+  useEffect(() => {
+    if (transactionsState.modal.currentTransaction) {
+      const c = transactionsState.modal.currentTransaction;
+      setFormState({
+        type: c.type === CategoryType.Income ? "income" : "expense",
+        categoryIncome: c.type === CategoryType.Income ? c.category : "",
+        categoryExpense: c.type === CategoryType.Expense ? c.category : "",
+        description: c.description,
+        amount: c.amount.toFixed(2),
+        date: c.date,
+      });
+      setCurrentTransactionId(c.id);
+    } else {
+      setFormState(emptyForm);
+    }
+  }, [transactionsState.modal.currentTransaction]);
 
   const errors = getErrors(formState);
   const isValid = Object.keys(errors).length === 0;
@@ -44,8 +69,6 @@ export default function CreateTransactionModal() {
     (touched.amount || status === FormStatusType.Submitted) && errors.amount;
   const hasDateError =
     (touched.date || status === FormStatusType.Submitted) && errors.date;
-
-  console.log(formState, isValid, errors);
 
   const categoriesState = useSelector((state: RootState) => state.categories);
   const categories = categoriesState.categories;
@@ -80,39 +103,47 @@ export default function CreateTransactionModal() {
   }
 
   function handleSubmit(e) {
-    console.log("handle submit");
     e.preventDefault();
     setStatus(FormStatusType.Submitting);
     if (isValid) {
-      dispatch(
-        createTransaction({
-          id: "",
-          type:
-            formState.type === "income"
-              ? CategoryType.Income
-              : CategoryType.Expense,
-          category:
-            formState.type === "income"
-              ? formState.categoryIncome
-              : formState.categoryExpense,
-          description: formState.description,
-          amount: Number(formState.amount),
-          date: formState.date,
-        })
-      );
+      const newTransaction = {
+        id: "",
+        type:
+          formState.type === "income"
+            ? CategoryType.Income
+            : CategoryType.Expense,
+        category:
+          formState.type === "income"
+            ? formState.categoryIncome
+            : formState.categoryExpense,
+        description: formState.description,
+        amount: Number(formState.amount),
+        date: formState.date,
+      };
+      if (transactionsState.modal.currentTransaction) {
+        newTransaction.id = transactionsState.modal.currentTransaction.id;
+        dispatch(updateTransaction(newTransaction));
+      } else {
+        dispatch(createTransaction(newTransaction));
+      }
       setStatus(FormStatusType.Completed);
-      dispatch(openModal(false));
+      dispatch(closeModal());
     } else {
       setStatus(FormStatusType.Submitted);
     }
   }
 
+  function handleDelete() {
+    dispatch(closeModal());
+    dispatch(deleteTransaction(currentTransactionId));
+  }
+
   return (
-    <Transition.Root show={transactionsState.modalOpen} as={Fragment}>
+    <Transition.Root show={transactionsState.modal.open} as={Fragment}>
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={(e) => dispatch(openModal(e))}
+        onClose={() => dispatch(closeModal())}
       >
         <Transition.Child
           as={Fragment}
@@ -143,7 +174,7 @@ export default function CreateTransactionModal() {
                     <button
                       type="button"
                       className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      onClick={() => dispatch(openModal(false))}
+                      onClick={() => dispatch(closeModal())}
                     >
                       <span className="sr-only">Close</span>
                       <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -155,7 +186,9 @@ export default function CreateTransactionModal() {
                         as="h3"
                         className="text-lg font-medium leading-6 text-gray-900"
                       >
-                        Add new transaction
+                        {transactionsState.modal.currentTransaction
+                          ? "Update Transaction"
+                          : "Add New Transaction"}
                       </Dialog.Title>
                       <div className="mt-2 text-left">
                         <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -367,7 +400,16 @@ export default function CreateTransactionModal() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-5 sm:mt-6 flex justify-center sm:justify-end">
+                  <div className="mt-5 sm:mt-6 flex justify-center sm:justify-end gap-2">
+                    {transactionsState.modal.currentTransaction && (
+                      <button
+                        type="button"
+                        className="inline-flex w-fit justify-center rounded-md border border-transparent bg-red-600 px-6 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:text-sm"
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </button>
+                    )}
                     <button
                       type="submit"
                       className="inline-flex w-fit justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"

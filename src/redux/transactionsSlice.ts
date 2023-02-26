@@ -23,8 +23,16 @@ export const transactionsSlice = createSlice({
     updateSelectedTab: (state, action: PayloadAction<string>) => {
       state.selectedTab = action.payload;
     },
-    openModal: (state, action: PayloadAction<boolean>) => {
-      state.modalOpen = action.payload;
+    openModalForCreate: (state) => {
+      state.modal.open = true;
+      state.modal.currentTransaction = undefined;
+    },
+    openModalForUpdate: (state, action: PayloadAction<Transaction>) => {
+      state.modal.open = true;
+      state.modal.currentTransaction = action.payload;
+    },
+    closeModal: (state) => {
+      state.modal.open = false;
     },
     createTransaction: (state, action: PayloadAction<Transaction>) => {
       state.transactions = [
@@ -32,10 +40,27 @@ export const transactionsSlice = createSlice({
         { ...action.payload, id: uuidv4() },
       ];
     },
+    updateTransaction: (state, action: PayloadAction<Transaction>) => {
+      state.transactions = state.transactions.map((t) =>
+        t.id === action.payload.id ? action.payload : t
+      );
+    },
+    deleteTransaction: (state, action: PayloadAction<string>) => {
+      state.transactions = state.transactions.filter(
+        (t) => t.id !== action.payload
+      );
+    },
   },
 });
 
-export const { updateSelectedTab, createTransaction, openModal } =
-  transactionsSlice.actions;
+export const {
+  updateSelectedTab,
+  createTransaction,
+  openModalForCreate,
+  openModalForUpdate,
+  closeModal,
+  updateTransaction,
+  deleteTransaction,
+} = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;
