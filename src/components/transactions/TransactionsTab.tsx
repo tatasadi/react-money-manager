@@ -51,11 +51,9 @@ export default function TransactionsTab() {
                       <div className="font-bold">{item.description}</div>
                       <div className="mx-2 text-sm text-gray-500">|</div>
                       <div className="text-sm text-gray-500">
-                        {
-                          categoriesState.categories?.find(
-                            (c) => c.id === item.category
-                          )?.name
-                        }
+                        {categoriesState.categories?.find(
+                          (c) => c.id === item.category
+                        )?.name ?? "Uncategorised"}
                       </div>
                     </div>
                     <div className="text-sm text-gray-500">

@@ -46,11 +46,15 @@ export default function TransactionModal() {
       setCurrentTransactionId(c.id);
     } else {
       setFormState(emptyForm);
+      setCurrentTransactionId("");
     }
+    setTouched({});
   }, [transactionsState.modal.currentTransaction]);
 
   const errors = getErrors(formState);
   const isValid = Object.keys(errors).length === 0;
+
+  //console.log(formState, errors, touched);
 
   const hasTypeError =
     (touched.type || status === FormStatusType.Submitted) && errors.type;
@@ -334,7 +338,6 @@ export default function TransactionModal() {
                               )}
                             </div>
                           </div>
-                          {/* FIXME: Amount accept just whole numbers! */}
                           <div className="sm:col-span-3">
                             <label
                               htmlFor="amount"
@@ -349,6 +352,7 @@ export default function TransactionModal() {
                                 type="number"
                                 autoComplete="amount"
                                 min={0}
+                                step=".01"
                                 value={formState.amount}
                                 onChange={handleFormChange}
                                 onBlur={handleBlur}
