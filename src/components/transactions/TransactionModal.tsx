@@ -381,7 +381,7 @@ export default function TransactionModal() {
                               <input
                                 id="date"
                                 name="date"
-                                type="text"
+                                type="date"
                                 autoComplete="date"
                                 value={formState.date}
                                 onChange={handleFormChange}
