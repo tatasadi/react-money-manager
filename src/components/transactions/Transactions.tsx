@@ -6,6 +6,7 @@ import Tabs from "../Tabs";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import TransactionModal from "./TransactionModal";
 import { openModalForCreate } from "../../redux/transactionsSlice";
+import MonthFilter from "../MonthFilter";
 
 const tabs = [
   { name: "All", href: "all" },
@@ -34,6 +35,7 @@ export default function Transactions() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-semibold text-gray-900">Transactions</h1>
       </div>
+      <MonthFilter />
       <Tabs tabs={tabs} updateTab={updateTab} />
       <button
         type="button"
