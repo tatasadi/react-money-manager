@@ -24,3 +24,42 @@ export function formatDate(dateStr) {
   });
   return dateFormat.format(date);
 }
+
+const month = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export function getMonthString(date: Date) {
+  return `${month[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+export function previousMonth(date: Date) {
+  let newMonth = date.getMonth() - 1;
+  let newYear = date.getFullYear();
+  if (newMonth === -1) {
+    newMonth = 11;
+    newYear--;
+  }
+  return new Date(newYear, newMonth, 1);
+}
+
+export function nextMonth(date: Date) {
+  let newMonth = date.getMonth() + 1;
+  let newYear = date.getFullYear();
+  if (newMonth === 12) {
+    newMonth = 0;
+    newYear++;
+  }
+  return new Date(newYear, newMonth, 1);
+}
