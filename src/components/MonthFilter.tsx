@@ -1,12 +1,19 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { getMonthString, nextMonth, previousMonth } from "../utils";
+import { setFilterDate } from "../redux/transactionsSlice";
+import {
+  dateToString,
+  getMonthString,
+  nextMonth,
+  previousMonth,
+} from "../utils";
 
 export default function MonthFilter() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const currentMonthString = getMonthString(currentDate);
+  const dispatch = useDispatch();
 
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
@@ -31,12 +38,16 @@ export default function MonthFilter() {
 
   function handlePreviousMonth() {
     if (previousDisabled) return;
-    setCurrentDate((prevDate) => previousMonth(prevDate));
+    const pm = previousMonth(currentDate);
+    setCurrentDate(pm);
+    dispatch(setFilterDate(dateToString(pm)));
   }
 
   function handleNextMonth() {
     if (nextDisabled) return;
-    setCurrentDate((prevDate) => nextMonth(prevDate));
+    const nm = nextMonth(currentDate);
+    setCurrentDate(nm);
+    dispatch(setFilterDate(dateToString(nm)));
   }
 
   return (

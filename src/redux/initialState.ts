@@ -2,6 +2,7 @@ import { CategoriesState } from "../models/CategoriesState";
 import { CategoryType } from "../models/CategoryType";
 import { ModalState } from "../models/ModalState";
 import { TransactionsState } from "../models/TransactionsState";
+import { dateToString } from "../utils";
 
 export const categoriesInitialState: CategoriesState = {
   selectedTab: "income",
@@ -83,6 +84,7 @@ export const transactionsInitialState: TransactionsState = {
   modal: {
     open: false,
   },
+  filterDate: dateToString(new Date()),
   transactions: [
     {
       id: "8808a818-c62f-49b4-a33a-9c7b68290e80",
@@ -90,7 +92,7 @@ export const transactionsInitialState: TransactionsState = {
       category: "db365832-0b17-4ce2-8797-3bc0ce8cf0b6",
       type: CategoryType.Expense,
       amount: 69.99,
-      date: "2022-01-23",
+      date: "2023-01-23",
     },
     {
       id: "378bd806-0dd0-4e59-8fce-697dfe829eb2",
@@ -98,7 +100,7 @@ export const transactionsInitialState: TransactionsState = {
       category: "30c38c18-ce5d-49f1-b5e2-15752613214b",
       type: CategoryType.Expense,
       amount: 65.99,
-      date: "2022-12-12",
+      date: "2023-01-21",
     },
     {
       id: "f93735b9-1587-4c38-8225-a22f3d81c397",

@@ -51,7 +51,7 @@ export function previousMonth(date: Date) {
     newMonth = 11;
     newYear--;
   }
-  return new Date(newYear, newMonth, 1);
+  return new Date(newYear, newMonth, 15);
 }
 
 export function nextMonth(date: Date) {
@@ -61,5 +61,9 @@ export function nextMonth(date: Date) {
     newMonth = 0;
     newYear++;
   }
-  return new Date(newYear, newMonth, 1);
+  return new Date(newYear, newMonth, 15);
+}
+
+export function dateToString(date: Date): string {
+  return date.toISOString().substring(0, 10);
 }

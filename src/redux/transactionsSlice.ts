@@ -50,6 +50,9 @@ export const transactionsSlice = createSlice({
         (t) => t.id !== action.payload
       );
     },
+    setFilterDate: (state, action: PayloadAction<string>) => {
+      state.filterDate = action.payload;
+    },
   },
 });
 
@@ -61,6 +64,7 @@ export const {
   closeModal,
   updateTransaction,
   deleteTransaction,
+  setFilterDate,
 } = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

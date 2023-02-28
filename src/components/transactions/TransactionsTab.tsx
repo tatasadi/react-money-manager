@@ -16,6 +16,8 @@ export default function TransactionsTab() {
     JSON.stringify(transactionsState.transactions)
   );
 
+  const filterDate = new Date(transactionsState.filterDate);
+
   let items;
 
   switch (transactionsState.selectedTab) {
@@ -33,6 +35,14 @@ export default function TransactionsTab() {
       );
       break;
   }
+
+  items = items?.filter((i) => {
+    const transactionDate = new Date(i.date);
+    return (
+      transactionDate.getMonth() === filterDate.getMonth() &&
+      transactionDate.getFullYear() === filterDate.getFullYear()
+    );
+  });
 
   return (
     <>

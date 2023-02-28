@@ -9,4 +9,5 @@ export interface TransactionsState {
   selectedTab: string;
   modal: TransactionModal;
   transactions: Transaction[];
+  filterDate: string;
 }
