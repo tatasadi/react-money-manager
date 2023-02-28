@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { classNames } from "./utils";
 import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import Categories from "./components/categories/Categories";
 import Transactions from "./components/transactions/Transactions";
 import CategoriesTab from "./components/categories/CategoriesTab";

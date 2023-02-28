@@ -6,6 +6,7 @@ import { setFilterDate } from "../redux/transactionsSlice";
 import {
   dateToString,
   getMonthString,
+  inSameMonth,
   nextMonth,
   previousMonth,
 } from "../utils";
@@ -28,13 +29,8 @@ export default function MonthFilter() {
   const firstDate = dates[0];
   const lastDate = dates[dates.length - 1];
 
-  const previousDisabled =
-    currentDate.getFullYear() === firstDate.getFullYear() &&
-    currentDate.getMonth() === firstDate.getMonth();
-
-  const nextDisabled =
-    currentDate.getFullYear() === lastDate.getFullYear() &&
-    currentDate.getMonth() === lastDate.getMonth();
+  const previousDisabled = inSameMonth(currentDate, firstDate);
+  const nextDisabled = inSameMonth(currentDate, lastDate);
 
   function handlePreviousMonth() {
     if (previousDisabled) return;

@@ -1,7 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { CategoryType } from "../../models/CategoryType";
 import { RootState } from "../../redux/store";
-import { classNames, formatCurrency, formatDate } from "../../utils";
+import {
+  classNames,
+  formatCurrency,
+  formatDate,
+  inSameMonth,
+} from "../../utils";
 import { openModalForUpdate } from "../../redux/transactionsSlice";
 
 export default function TransactionsTab() {
@@ -38,10 +43,7 @@ export default function TransactionsTab() {
 
   items = items?.filter((i) => {
     const transactionDate = new Date(i.date);
-    return (
-      transactionDate.getMonth() === filterDate.getMonth() &&
-      transactionDate.getFullYear() === filterDate.getFullYear()
-    );
+    return inSameMonth(transactionDate, filterDate);
   });
 
   return (
