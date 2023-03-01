@@ -27,10 +27,9 @@ export default function MonthFilter() {
   });
 
   const firstDate = dates[0];
-  const lastDate = dates[dates.length - 1];
 
   const previousDisabled = inSameMonth(currentDate, firstDate);
-  const nextDisabled = inSameMonth(currentDate, lastDate);
+  const nextDisabled = inSameMonth(currentDate, new Date());
 
   function handlePreviousMonth() {
     if (previousDisabled) return;

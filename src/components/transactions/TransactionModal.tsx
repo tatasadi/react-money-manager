@@ -33,7 +33,10 @@ export default function TransactionModal() {
   const [currentTransactionId, setCurrentTransactionId] = useState("");
 
   useEffect(() => {
-    if (transactionsState.modal.currentTransaction) {
+    if (
+      transactionsState.modal.open &&
+      transactionsState.modal.currentTransaction
+    ) {
       const c = transactionsState.modal.currentTransaction;
       setFormState({
         type: c.type === CategoryType.Income ? "income" : "expense",
@@ -49,7 +52,7 @@ export default function TransactionModal() {
       setCurrentTransactionId("");
     }
     setTouched({});
-  }, [transactionsState.modal.currentTransaction]);
+  }, [transactionsState.modal.open]);
 
   const errors = getErrors(formState);
   const isValid = Object.keys(errors).length === 0;

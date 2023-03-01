@@ -8,6 +8,24 @@ import {
   previousMonth,
 } from "../../utils";
 
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+export const chartDate = {
+  labels: ["Income", "Expense"],
+  datasets: [
+    {
+      label: "",
+      data: null,
+      backgroundColor: ["#86efac", "#fca5a5"],
+      borderColor: ["#16a34a", "#dc2626"],
+      borderWidth: 1,
+    },
+  ],
+};
+
 function BalanceStats() {
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
@@ -64,11 +82,14 @@ function BalanceStats() {
   ];
 
   return (
-    <dl className="mt-2 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow lg:grid-cols-3 md:divide-y-0 md:divide-x">
+    <dl className="mt-2 grid grid-cols-1 divide-y divide-gray-200 lg:grid-cols-3 md:divide-y-0 md:divide-x gap-4">
       {stats.map((item) => {
         const balance = item.income - item.expense;
         return (
-          <div key={item.name} className="px-4 py-5 sm:p-6">
+          <div
+            key={item.name}
+            className="px-4 py-5 sm:p-6 bg-white shadow rounded-lg"
+          >
             <dt className="text-base font-normal text-gray-900">{item.name}</dt>
             <dd className="mt-1">
               <div className="flex justify-between items-baseline font-semibold ">
@@ -94,6 +115,21 @@ function BalanceStats() {
                   {formatCurrency(balance)}
                 </div>
               </div>
+              {balance !== 0 && (
+                <div className="flex justify-center items-center xl:p-10 lg:p-5 p-10">
+                  <Pie
+                    data={{
+                      ...chartDate,
+                      datasets: [
+                        {
+                          ...chartDate.datasets[0],
+                          data: [item.income, item.expense],
+                        },
+                      ],
+                    }}
+                  />
+                </div>
+              )}
             </dd>
           </div>
         );
