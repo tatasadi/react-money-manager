@@ -5,7 +5,7 @@ import {
   classNames,
   formatCurrency,
   inSameMonth,
-  previousMonth,
+  inSameYear,
 } from "../../utils";
 
 import {
@@ -65,30 +65,31 @@ function BalanceStats() {
 
   let totalIncome = 0,
     tatalExpense = 0,
-    lastMonthIncome = 0,
-    lastMonthExpense = 0,
+    thisYearIncome = 0,
+    thisYearExpense = 0,
     thisMonthIncome = 0,
     thisMonthExpense = 0;
 
   const thisMonth = new Date();
-  const lastMonth = previousMonth(thisMonth);
 
   for (let transaction of transactionsState.transactions) {
     const transactionDate = new Date(transaction.date);
     switch (transaction.type) {
       case CategoryType.Income:
         totalIncome += transaction.amount;
-        if (inSameMonth(transactionDate, lastMonth)) {
-          lastMonthIncome += transaction.amount;
-        } else if (inSameMonth(transactionDate, thisMonth)) {
+        if (inSameYear(transactionDate, thisMonth)) {
+          thisYearIncome += transaction.amount;
+        }
+        if (inSameMonth(transactionDate, thisMonth)) {
           thisMonthIncome += transaction.amount;
         }
         break;
       case CategoryType.Expense:
         tatalExpense += transaction.amount;
-        if (inSameMonth(transactionDate, lastMonth)) {
-          lastMonthExpense += transaction.amount;
-        } else if (inSameMonth(transactionDate, thisMonth)) {
+        if (inSameYear(transactionDate, thisMonth)) {
+          thisYearExpense += transaction.amount;
+        }
+        if (inSameMonth(transactionDate, thisMonth)) {
           thisMonthExpense += transaction.amount;
         }
         break;
@@ -103,10 +104,10 @@ function BalanceStats() {
       balance: totalIncome - tatalExpense,
     },
     {
-      name: "Last Month",
-      income: lastMonthIncome,
-      expense: lastMonthExpense,
-      balance: lastMonthIncome - lastMonthExpense,
+      name: "This Year",
+      income: thisYearIncome,
+      expense: thisYearExpense,
+      balance: thisYearIncome - thisYearExpense,
     },
     {
       name: "This Month",
@@ -121,20 +122,20 @@ function BalanceStats() {
     datasets: [
       {
         label: "Income",
-        data: [lastMonthIncome, thisMonthIncome, 1000, 2000, 2500, 1500, 1700],
+        data: [thisYearIncome, thisMonthIncome, 1000, 2000, 2500, 1500, 1700],
         borderColor: "#86efac",
         backgroundColor: "#16a34a",
       },
       {
         label: "Expense",
-        data: [lastMonthExpense, thisMonthExpense, 600, 1300, 1700, 2000, 1700],
+        data: [thisYearExpense, thisMonthExpense, 600, 1300, 1700, 2000, 1700],
         borderColor: "#fca5a5",
         backgroundColor: "#dc2626",
       },
       {
         label: "Balance",
         data: [
-          lastMonthIncome - lastMonthExpense,
+          thisYearIncome - thisYearExpense,
           thisMonthIncome - thisMonthExpense,
           400,
           700,
@@ -185,7 +186,7 @@ function BalanceStats() {
                   </div>
                 </div>
                 {item.balance !== 0 && (
-                  <div className="flex justify-center items-center xl:p-10 lg:p-5 p-10">
+                  <div className="flex justify-center items-center xl:p-10 lg:p-5 p-10 max-w-xs m-auto">
                     <Pie
                       data={{
                         ...pieChartDate,
@@ -218,11 +219,9 @@ export default function Dashboard() {
         <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        {/* Replace with your content */}
         <div className="py-4">
           <BalanceStats />
         </div>
-        {/* /End replace */}
       </div>
     </div>
   );

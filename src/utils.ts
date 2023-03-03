@@ -74,3 +74,7 @@ export function inSameMonth(date1: Date, date2: Date): boolean {
     date1.getFullYear() === date2.getFullYear()
   );
 }
+
+export function inSameYear(date1: Date, date2: Date): boolean {
+  return date1.getFullYear() === date2.getFullYear();
+}
