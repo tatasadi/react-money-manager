@@ -174,7 +174,7 @@ function BalanceStats() {
                     {formatCurrency(item.expense)}
                   </div>
                 </div>
-                <div className="flex justify-between font-semibold border-t-2 mt-4">
+                <div className="flex justify-between font-semibold border-t-2 mt-2 pt-2">
                   <div className="text-gray-900">Balance</div>
                   <div
                     className={classNames(

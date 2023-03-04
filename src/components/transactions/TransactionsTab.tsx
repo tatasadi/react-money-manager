@@ -8,6 +8,7 @@ import {
   inSameMonth,
 } from "../../utils";
 import { openModalForUpdate } from "../../redux/transactionsSlice";
+import { Transaction } from "../../models/Transaction";
 
 export default function TransactionsTab() {
   const dispatch = useDispatch();
@@ -23,21 +24,22 @@ export default function TransactionsTab() {
 
   const filterDate = new Date(transactionsState.filterDate);
 
+  let transactions = [...transactionsState.transactions];
+  transactions.sort(function (a, b) {
+    return new Date(b.date) - new Date(a.date);
+  });
+
   let items;
 
   switch (transactionsState.selectedTab) {
     case "all":
-      items = transactionsState.transactions;
+      items = transactions;
       break;
     case "income":
-      items = transactionsState.transactions.filter(
-        (t) => t.type === CategoryType.Income
-      );
+      items = transactions.filter((t) => t.type === CategoryType.Income);
       break;
     case "expenses":
-      items = transactionsState.transactions.filter(
-        (t) => t.type === CategoryType.Expense
-      );
+      items = transactions.filter((t) => t.type === CategoryType.Expense);
       break;
   }
 
