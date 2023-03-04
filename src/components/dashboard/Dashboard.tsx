@@ -45,7 +45,7 @@ const lineChartOptions = {
   },
 };
 
-const pieChartDate = {
+const pieChartData = {
   labels: ["Income", "Expense"],
   datasets: [
     {
@@ -189,10 +189,10 @@ function BalanceStats() {
                   <div className="flex justify-center items-center xl:p-10 lg:p-5 p-10 max-w-xs m-auto">
                     <Pie
                       data={{
-                        ...pieChartDate,
+                        ...pieChartData,
                         datasets: [
                           {
-                            ...pieChartDate.datasets[0],
+                            ...pieChartData.datasets[0],
                             data: [item.income, item.expense],
                           },
                         ],
