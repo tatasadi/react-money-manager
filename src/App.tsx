@@ -2,18 +2,13 @@ import { Fragment, useReducer, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
   HomeIcon,
-  InboxIcon,
-  UsersIcon,
   XMarkIcon,
   ListBulletIcon,
   RectangleGroupIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "./utils";
-import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/dashboard/Dashboard";
 import Categories from "./components/categories/Categories";
 import Transactions from "./components/transactions/Transactions";
@@ -33,11 +28,6 @@ const navigation = [
     href: "/transactions",
     icon: ListBulletIcon,
   },
-  // { name: "Team", href: "#", icon: UsersIcon, current: false },
-  // { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  // { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  // { name: "Documents", href: "#", icon: InboxIcon, current: false },
-  // { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
 ];
 
 export default function App() {
@@ -189,6 +179,13 @@ export default function App() {
                 </Link>
               ))}
             </nav>
+            <div className="text-white text-center p-4">
+              <p>
+                This site is created for demonstrative purposes only and does
+                not offer any real products or services.
+              </p>
+              <p className="mt-2">© ehsan.tatasadi.com</p>
+            </div>
           </div>
         </div>
       </div>
