@@ -3,6 +3,8 @@ import { RootState } from "../../redux/store";
 import moment from "moment";
 import LastSixMonthLineChart from "./LastSixMonthLineChart";
 import BalanceCards from "./BalanceCards";
+import _ from "lodash";
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -14,6 +16,7 @@ import {
   LineElement,
   Title,
 } from "chart.js";
+import { ExpensesStackeBarChart } from "./ExpensesStackeBarChart";
 
 ChartJS.register(
   ArcElement,
@@ -36,6 +39,12 @@ export default function Dashboard() {
     return moment(b.date).diff(moment(a.date));
   });
 
+  const groupedByMonthTransactions = _.groupBy(
+    transactions,
+    (transaction: Transaction) =>
+      moment(transaction.date).startOf("month").format("YYYY-MM")
+  );
+
   return (
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -44,7 +53,14 @@ export default function Dashboard() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <div className="py-4">
           <BalanceCards transactions={transactions} />
-          <LastSixMonthLineChart transactions={transactions} />
+          <div className="grid lg:grid-cols-2 gap-4">
+            <LastSixMonthLineChart
+              groupedByMonthTransactions={groupedByMonthTransactions}
+            />
+            <ExpensesStackeBarChart
+              groupedByMonthTransactions={groupedByMonthTransactions}
+            />
+          </div>
         </div>
       </div>
     </div>

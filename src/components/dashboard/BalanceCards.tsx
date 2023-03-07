@@ -112,7 +112,7 @@ export default function BalanceCards({ transactions }) {
                   </div>
                 </div>
                 {item.balance !== 0 && (
-                  <div className="flex justify-center items-center xl:p-10 lg:p-5 p-10 max-w-xs m-auto">
+                  <div className="flex justify-center items-center xl:p-10 lg:p-5 p-10 max-w-xs m-auto ">
                     <Pie
                       data={{
                         ...pieChartData,

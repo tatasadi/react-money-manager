@@ -5,7 +5,7 @@ import { Transaction } from "../../models/Transaction";
 import { getLastSixMonthYearAndMonth } from "../../utils";
 import _ from "lodash";
 
-const lineChartOptions = {
+const options = {
   responsive: true,
   plugins: {
     legend: {
@@ -18,12 +18,8 @@ const lineChartOptions = {
   },
 };
 
-export default function LastSixMonthLineChart({ transactions }) {
-  let groupedByMonthTransactions = _.groupBy(
-    transactions,
-    (transaction: Transaction) =>
-      moment(transaction.date).startOf("month").format("YYYY-MM")
-  );
+export default function LastSixMonthLineChart({ groupedByMonthTransactions }) {
+  const chartDataSet = {};
 
   _.forOwn(groupedByMonthTransactions, function (arr, key) {
     const totalIncomeOfTheMonth = arr
@@ -34,46 +30,49 @@ export default function LastSixMonthLineChart({ transactions }) {
       .filter((t) => t.type === CategoryType.Expense)
       .reduce((acc, cur) => (acc += cur.amount), 0);
 
-    groupedByMonthTransactions[key]["income"] = totalIncomeOfTheMonth;
-    groupedByMonthTransactions[key]["expense"] = totalExpenseOfTheMonth;
-    groupedByMonthTransactions[key]["balance"] =
+    if (chartDataSet[key] === undefined) {
+      chartDataSet[key] = {};
+    }
+    chartDataSet[key]["income"] = totalIncomeOfTheMonth;
+    chartDataSet[key]["expense"] = totalExpenseOfTheMonth;
+    chartDataSet[key]["balance"] =
       totalIncomeOfTheMonth - totalExpenseOfTheMonth;
   });
 
   const lastSixMonth = getLastSixMonthYearAndMonth();
-  const incomeLineChartDataSet: number[] = [];
-  const expenseLineChartDataSet: number[] = [];
-  const balanceLineChartDataSet: number[] = [];
+  const incomeDataSet: number[] = [];
+  const expenseDataSet: number[] = [];
+  const balanceDataSet: number[] = [];
   lastSixMonth.forEach((m) => {
-    if (groupedByMonthTransactions[m]) {
-      incomeLineChartDataSet.push(groupedByMonthTransactions[m]["income"]);
-      expenseLineChartDataSet.push(groupedByMonthTransactions[m]["expense"]);
-      balanceLineChartDataSet.push(groupedByMonthTransactions[m]["balance"]);
+    if (chartDataSet[m]) {
+      incomeDataSet.push(chartDataSet[m]["income"]);
+      expenseDataSet.push(chartDataSet[m]["expense"]);
+      balanceDataSet.push(chartDataSet[m]["balance"]);
     } else {
-      incomeLineChartDataSet.push(0);
-      expenseLineChartDataSet.push(0);
-      balanceLineChartDataSet.push(0);
+      incomeDataSet.push(0);
+      expenseDataSet.push(0);
+      balanceDataSet.push(0);
     }
   });
 
-  const lineChartData = {
+  const data = {
     labels: getLastSixMonthYearAndMonth(),
     datasets: [
       {
         label: "Income",
-        data: incomeLineChartDataSet,
+        data: incomeDataSet,
         borderColor: "#86efac",
         backgroundColor: "#16a34a",
       },
       {
         label: "Expense",
-        data: expenseLineChartDataSet,
+        data: expenseDataSet,
         borderColor: "#fca5a5",
         backgroundColor: "#dc2626",
       },
       {
         label: "Balance",
-        data: balanceLineChartDataSet,
+        data: balanceDataSet,
         borderColor: "#a5b4fc",
         backgroundColor: "#4f46e5",
       },
@@ -82,7 +81,7 @@ export default function LastSixMonthLineChart({ transactions }) {
 
   return (
     <div className="bg-white rounded-lg shadow mt-4 p-10">
-      <Line options={lineChartOptions} data={lineChartData} />
+      <Line options={options} data={data} height="300px" />
     </div>
   );
 }
