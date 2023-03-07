@@ -57,8 +57,6 @@ export default function TransactionModal() {
   const errors = getErrors(formState);
   const isValid = Object.keys(errors).length === 0;
 
-  //console.log(formState, errors, touched);
-
   const hasTypeError =
     (touched.type || status === FormStatusType.Submitted) && errors.type;
   const hasCategoryIncomeError =

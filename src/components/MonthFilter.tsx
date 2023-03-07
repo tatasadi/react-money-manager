@@ -12,13 +12,15 @@ import {
 } from "../utils";
 
 export default function MonthFilter() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const currentMonthString = getMonthString(currentDate);
-  const dispatch = useDispatch();
-
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
   );
+
+  const [currentDate, setCurrentDate] = useState(
+    new Date(transactionsState.filterDate)
+  );
+  const currentMonthString = getMonthString(currentDate);
+  const dispatch = useDispatch();
 
   const dates = transactionsState.transactions.map((t) => new Date(t.date));
 
