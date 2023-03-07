@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -77,4 +79,30 @@ export function inSameMonth(date1: Date, date2: Date): boolean {
 
 export function inSameYear(date1: Date, date2: Date): boolean {
   return date1.getFullYear() === date2.getFullYear();
+}
+
+export function getLastSixMonthNames(): string[] {
+  const today = new Date();
+  const result = [];
+  for (var i = 5; i >= 0; i -= 1) {
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    result.push(month[date.getMonth()]);
+  }
+  return result;
+}
+
+export function getLastSixMonthYearAndMonth(): string[] {
+  const today = new Date();
+  const result = [];
+  for (var i = 5; i >= 0; i -= 1) {
+    let month = today.getMonth() - i;
+    let year = today.getFullYear();
+    const date = moment.utc();
+    date.set("year", year);
+    date.set("month", month);
+    date.set("date", 1);
+    date.startOf("day");
+    result.push(date.format("YYYY-MM"));
+  }
+  return result;
 }

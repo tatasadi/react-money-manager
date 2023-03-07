@@ -8,7 +8,6 @@ import {
   inSameMonth,
 } from "../../utils";
 import { openModalForUpdate } from "../../redux/transactionsSlice";
-import { Transaction } from "../../models/Transaction";
 
 export default function TransactionsTab() {
   const dispatch = useDispatch();

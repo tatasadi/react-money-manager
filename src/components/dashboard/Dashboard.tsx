@@ -4,6 +4,8 @@ import { RootState } from "../../redux/store";
 import {
   classNames,
   formatCurrency,
+  getLastSixMonthNames,
+  getLastSixMonthYearAndMonth,
   inSameMonth,
   inSameYear,
 } from "../../utils";
@@ -31,6 +33,10 @@ ChartJS.register(
   LineElement,
   Title
 );
+
+import _ from "lodash";
+import { Transaction } from "../../models/Transaction";
+import moment from "moment";
 
 const lineChartOptions = {
   responsive: true,
@@ -63,6 +69,48 @@ function BalanceStats() {
     (state: RootState) => state.transactions
   );
 
+  const transactions = [...transactionsState.transactions];
+  transactions.sort((a, b) => {
+    return moment(b.date).diff(moment(a.date));
+  });
+
+  let groupedByMonthTransactions = _.groupBy(
+    transactions,
+    (transaction: Transaction) =>
+      moment(transaction.date).startOf("month").format("YYYY-MM")
+  );
+
+  _.forOwn(groupedByMonthTransactions, function (arr, key) {
+    const totalIncomeOfTheMonth = arr
+      .filter((t) => t.type === CategoryType.Income)
+      .reduce((acc, cur) => (acc += cur.amount), 0);
+
+    const totalExpenseOfTheMonth = arr
+      .filter((t) => t.type === CategoryType.Expense)
+      .reduce((acc, cur) => (acc += cur.amount), 0);
+
+    groupedByMonthTransactions[key]["income"] = totalIncomeOfTheMonth;
+    groupedByMonthTransactions[key]["expense"] = totalExpenseOfTheMonth;
+    groupedByMonthTransactions[key]["balance"] =
+      totalIncomeOfTheMonth - totalExpenseOfTheMonth;
+  });
+
+  const lastSixMonth = getLastSixMonthYearAndMonth();
+  const incomeLineChartDataSet: number[] = [];
+  const expenseLineChartDataSet: number[] = [];
+  const balanceLineChartDataSet: number[] = [];
+  lastSixMonth.forEach((m) => {
+    if (groupedByMonthTransactions[m]) {
+      incomeLineChartDataSet.push(groupedByMonthTransactions[m]["income"]);
+      expenseLineChartDataSet.push(groupedByMonthTransactions[m]["expense"]);
+      balanceLineChartDataSet.push(groupedByMonthTransactions[m]["balance"]);
+    } else {
+      incomeLineChartDataSet.push(0);
+      expenseLineChartDataSet.push(0);
+      balanceLineChartDataSet.push(0);
+    }
+  });
+
   let totalIncome = 0,
     tatalExpense = 0,
     thisYearIncome = 0,
@@ -72,7 +120,7 @@ function BalanceStats() {
 
   const thisMonth = new Date();
 
-  for (let transaction of transactionsState.transactions) {
+  for (let transaction of transactions) {
     const transactionDate = new Date(transaction.date);
     switch (transaction.type) {
       case CategoryType.Income:
@@ -118,31 +166,23 @@ function BalanceStats() {
   ];
 
   const lineChartData = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: getLastSixMonthYearAndMonth(),
     datasets: [
       {
         label: "Income",
-        data: [thisYearIncome, thisMonthIncome, 1000, 2000, 2500, 1500, 1700],
+        data: incomeLineChartDataSet,
         borderColor: "#86efac",
         backgroundColor: "#16a34a",
       },
       {
         label: "Expense",
-        data: [thisYearExpense, thisMonthExpense, 600, 1300, 1700, 2000, 1700],
+        data: expenseLineChartDataSet,
         borderColor: "#fca5a5",
         backgroundColor: "#dc2626",
       },
       {
         label: "Balance",
-        data: [
-          thisYearIncome - thisYearExpense,
-          thisMonthIncome - thisMonthExpense,
-          400,
-          700,
-          800,
-          -500,
-          0,
-        ],
+        data: balanceLineChartDataSet,
         borderColor: "#a5b4fc",
         backgroundColor: "#4f46e5",
       },
