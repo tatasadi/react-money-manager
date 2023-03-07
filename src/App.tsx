@@ -179,12 +179,21 @@ export default function App() {
                 </Link>
               ))}
             </nav>
-            <div className="text-white text-center p-4">
+            <div className="text-white text-center p-4 text-sm">
               <p>
                 This site is created for demonstrative purposes only and does
                 not offer any real products or services.
               </p>
-              <p className="mt-2">© ehsan.tatasadi.com</p>
+              <p className="mt-1">
+                ©{" "}
+                <a
+                  className="hover:text-indigo-300"
+                  href="https://ehsan.tatasadi.com"
+                  target="_blank"
+                >
+                  ehsan.tatasadi.com
+                </a>
+              </p>
             </div>
           </div>
         </div>
