@@ -3,7 +3,7 @@
 Would you like to manage your income and expenses in one app? If yes, this app is for you!
 You can add different income and expense categories. After that you can start add transactions and see an overview of your income and expenses in dashboard.
 
-You can see the demo of the app here (ToDo: Add Link to the demo).
+You can see the demo of the app [here](http://moneymanager.projects.tatasadi.com/).
 
 For demonstrative purposes some data is added to the app.
 
