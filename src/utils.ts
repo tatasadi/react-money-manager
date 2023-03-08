@@ -84,7 +84,7 @@ export function inSameYear(date1: Date, date2: Date): boolean {
 
 export function getLastSixMonthNames(): string[] {
   const today = new Date();
-  const result = [];
+  const result: string[] = [];
   for (var i = 5; i >= 0; i -= 1) {
     const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
     result.push(month[date.getMonth()]);
@@ -94,7 +94,7 @@ export function getLastSixMonthNames(): string[] {
 
 export function getLastSixMonthYearAndMonth(): string[] {
   const today = new Date();
-  const result = [];
+  const result: string[] = [];
   for (var i = 5; i >= 0; i -= 1) {
     let month = today.getMonth() - i;
     let year = today.getFullYear();

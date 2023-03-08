@@ -25,7 +25,7 @@ export default function MonthFilter() {
   const dates = transactionsState.transactions.map((t) => new Date(t.date));
 
   dates.sort(function (a, b) {
-    return a - b;
+    return a.valueOf() - b.valueOf();
   });
 
   const firstDate = dates[0];

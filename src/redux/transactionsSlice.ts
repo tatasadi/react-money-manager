@@ -7,7 +7,7 @@ const initialState = transactionsInitialState;
 
 try {
   const transactionsInLocalStorage = JSON.parse(
-    localStorage.getItem("transactions")
+    localStorage.getItem("transactions") as string
   );
   if (transactionsInLocalStorage) {
     initialState.transactions = transactionsInLocalStorage;

@@ -25,7 +25,7 @@ export default function TransactionsTab() {
 
   let transactions = [...transactionsState.transactions];
   transactions.sort(function (a, b) {
-    return new Date(b.date) - new Date(a.date);
+    return new Date(b.date).valueOf() - new Date(a.date).valueOf();
   });
 
   let items;

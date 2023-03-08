@@ -86,7 +86,6 @@ export function ExpensesStackeBarChart({ groupedByMonthTransactions }) {
     });
   });
 
-  console.log(groupedByMonthTransactions);
   const datasets = categoriesExpense.map((category, index) => {
     const categoryData = getLastSixMonthYearAndMonth().map((m) => {
       if (

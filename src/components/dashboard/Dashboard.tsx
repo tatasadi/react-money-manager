@@ -17,6 +17,7 @@ import {
   Title,
 } from "chart.js";
 import { ExpensesStackeBarChart } from "./ExpensesStackeBarChart";
+import { Transaction } from "../../models/Transaction";
 
 ChartJS.register(
   ArcElement,

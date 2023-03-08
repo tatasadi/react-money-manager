@@ -8,7 +8,7 @@ const initialState = categoriesInitialState;
 
 try {
   const categoriesInLocalStorage = JSON.parse(
-    localStorage.getItem("categories")
+    localStorage.getItem("categories") as string
   );
   if (categoriesInLocalStorage) {
     initialState.categories = categoriesInLocalStorage;

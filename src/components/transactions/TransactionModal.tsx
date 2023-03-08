@@ -27,9 +27,17 @@ export default function TransactionModal() {
     amount: "",
     date: "",
   };
+  const touchedInit = {
+    type: false,
+    categoryIncome: false,
+    categoryExpense: false,
+    description: false,
+    amount: false,
+    date: false,
+  };
   const [formState, setFormState] = useState(emptyForm);
   const [status, setStatus] = useState(FormStatusType.Idle);
-  const [touched, setTouched] = useState({});
+  const [touched, setTouched] = useState(touchedInit);
   const [currentTransactionId, setCurrentTransactionId] = useState("");
 
   useEffect(() => {
@@ -51,10 +59,10 @@ export default function TransactionModal() {
       setFormState(emptyForm);
       setCurrentTransactionId("");
     }
-    setTouched({});
+    setTouched(touchedInit);
   }, [transactionsState.modal.open]);
 
-  const errors = getErrors(formState);
+  const errors = getErrors();
   const isValid = Object.keys(errors).length === 0;
 
   const hasTypeError =
@@ -85,7 +93,13 @@ export default function TransactionModal() {
   );
 
   function getErrors() {
-    const result = {};
+    const result = {
+      type: "",
+      category: "",
+      description: "",
+      amount: "",
+      date: "",
+    };
     if (!formState.type) result.type = "Please select a type!";
     if (!formState.categoryIncome && !formState.categoryExpense)
       result.category = "Please select a category!";
