@@ -107,3 +107,26 @@ export function getLastSixMonthYearAndMonth(): string[] {
   }
   return result;
 }
+
+export function randomDate(start, end) {
+  return moment(
+    start.valueOf() + Math.random() * (end.valueOf() - start.valueOf())
+  ).format("YYYY-MM-DD");
+}
+
+export function randomDateSinceXMonthAgo(sinceXMonthAgo: number) {
+  return randomDate(
+    moment().subtract(sinceXMonthAgo, "months").endOf("month"),
+    moment()
+  );
+}
+
+export function randomDateBetweenXMonthAndYMonthAgo(
+  fromXMonthAgo: number,
+  toYMonthAgo: number
+) {
+  return randomDate(
+    moment().subtract(fromXMonthAgo, "months").endOf("month"),
+    moment().subtract(toYMonthAgo, "months").endOf("month")
+  );
+}

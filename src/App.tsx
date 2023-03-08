@@ -1,4 +1,4 @@
-import { Fragment, useReducer, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -7,7 +7,7 @@ import {
   ListBulletIcon,
   RectangleGroupIcon,
 } from "@heroicons/react/24/outline";
-import { classNames } from "./utils";
+import { classNames, randomDate } from "./utils";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./components/dashboard/Dashboard";
 import Categories from "./components/categories/Categories";
