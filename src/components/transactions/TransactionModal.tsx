@@ -63,7 +63,7 @@ export default function TransactionModal() {
   }, [transactionsState.modal.open]);
 
   const errors = getErrors();
-  const isValid = Object.keys(errors).length === 0;
+  const isValid = Object.values(errors).every((x) => x === "");
 
   const hasTypeError =
     (touched.type || status === FormStatusType.Submitted) && errors.type;

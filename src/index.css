@@ -5,9 +5,6 @@
 @layer base {
   input,
   select {
-    @apply p-2 border  bg-white;
-  }
-  input {
-    @apply focus:border-0;
+    @apply p-2 border bg-white;
   }
 }
